@@ -138,3 +138,32 @@ tbcare-backend/
 ├── .env.example
 └── README.md
 ```
+
+---
+
+## API Endpoints
+
+Semua request melalui **API Gateway** di `http://localhost:3000`.
+
+> `🔒` = Membutuhkan header `Authorization: Bearer <token>`
+
+---
+
+### Auth — `/api/auth`
+
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| POST | `/auth/register` | Registrasi akun baru | - |
+| POST | `/auth/login` | Login dan dapatkan token | - |
+
+---
+
+### User — `/api/users`
+
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| GET | `/users/profile` | Ambil data profil | 🔒 |
+| PUT | `/users/profile` | Update nama & no telepon | 🔒 |
+| PUT | `/users/change-password` | Ganti password | 🔒 |
+
+---
