@@ -1,5 +1,5 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const authMiddleware = require('../middleware/authMiddleware');
+const authMiddleware = require('../../src/middleware/authMiddleware');
 
 const router = require('express').Router();
 
@@ -21,7 +21,7 @@ router.use('/api/auth', proxy(process.env.USER_SERVICE_URL));
 
 router.use('/api/users', authMiddleware, proxy(process.env.USER_SERVICE_URL));
 router.use('/api/edukasi', authMiddleware, proxy(process.env.EDUKASI_SERVICE_URL));
-router.use('/api/reminder', authMiddleware, proxy(process.env.REMINDER_SERVICE_URL));
+router.use('/api/medicine', authMiddleware, proxy(process.env.MEDICINE_SERVICE_URL));
 router.use('/api/chatbot', authMiddleware, proxy(process.env.CHATBOT_SERVICE_URL));
 router.use('/api/skrining', authMiddleware, proxy(process.env.SKRINING_SERVICE_URL));
 router.use('/api/layanan', authMiddleware, proxy(process.env.LAYANAN_SERVICE_URL));
