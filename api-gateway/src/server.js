@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const proxyRoutes = require('./src/routes/routes');
+const proxyRoutes = require('./routes/routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,11 +19,9 @@ app.get('/', (req, res) => {
     res.json({ message: `API Gateway berjalan pada port ${PORT}` });
 });
 
-
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', service: 'api-gateway' });
 });
-
 
 app.use('/', proxyRoutes);
 
