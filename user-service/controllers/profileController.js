@@ -29,7 +29,7 @@ const updateProfile = async (req, res) => {
         const user = await User.findByIdAndUpdate(
             req.userId,
             { nama_lengkap, no_telepon },
-            { new: true, runValidators: true }
+            { returnDocument: 'after', runValidators: true }
         ).select('-password -__v');
 
         return successResponse(res, 'Profil berhasil diperbarui', user);
