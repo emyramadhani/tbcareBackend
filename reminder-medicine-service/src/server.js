@@ -27,8 +27,8 @@ app.get('/', (req, res) => {
     res.json({ message: `reminder medicine berjalan pada port ${PORT}` });
 });
 
-app.use('/obat', obatRoutes);
-app.use('/riwayat-obat', medicineHistoryRoutes);
+app.use('/api/obat', obatRoutes);
+app.use('/api/riwayat-obat', medicineHistoryRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route tidak ditemukan' });
