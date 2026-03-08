@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/user');
+const BlacklistedToken = require('../models/blacklistedToken');
 const { successResponse, errorResponse } = require('../utils/response');
 
 
@@ -12,7 +13,6 @@ const generateToken = (user) => {
     );
 };
 
-// register
 const register = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -50,7 +50,7 @@ const register = async (req, res) => {
     }
 };
 
-// login
+
 const login = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -87,4 +87,27 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { register, login };
+const logout = async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return errorResponse(res, 'Token tidak ditemukan', 400);
+    }
+
+    const alreadyBlacklisted = await BlacklistedToken.findOne({ token });
+    if (alreadyBlacklisted) {
+      return errorResponse(res, 'Token sudah tidak aktif', 400);
+    }
+
+    await BlacklistedToken.create({ token });
+
+    return successResponse(res, 'Logout berhasil');
+  } catch (err) {
+    console.error('Error:', err);
+    return errorResponse(res, 'Server error', 500);
+  }
+};
+
+module.exports = { register, login, logout};
