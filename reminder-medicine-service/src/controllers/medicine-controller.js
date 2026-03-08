@@ -21,6 +21,7 @@ const createObat = async (req, res) => {
 
     return successResponse(res, 'Obat berhasil ditambahkan', obat, 201);
   } catch (err) {
+    console.error('ERROR DETAIL:', err);
     return errorResponse(res, 'Server error', 500);
   }
 };
@@ -36,6 +37,7 @@ const getAllObat = async (req, res) => {
 
     return successResponse(res, 'Berhasil mengambil data obat', obatList);
   } catch (err) {
+    console.error('ERROR DETAIL:', err);
     return errorResponse(res, 'Server error', 500);
   }
 };
@@ -55,6 +57,7 @@ const getObatById = async (req, res) => {
 
     return successResponse(res, 'Berhasil mengambil detail obat', obat);
   } catch (err) {
+    console.error('ERROR DETAIL:', err);
     return errorResponse(res, 'Server error', 500);
   }
 };
@@ -84,6 +87,7 @@ const updateObat = async (req, res) => {
 
     return successResponse(res, 'Obat berhasil diperbarui', obat);
   } catch (err) {
+    console.error('ERROR DETAIL:', err);
     return errorResponse(res, 'Server error', 500);
   }
 };
@@ -106,6 +110,7 @@ const deleteObat = async (req, res) => {
 
     return successResponse(res, 'Obat berhasil dihapus');
   } catch (err) {
+    console.error('ERROR DETAIL:', err);
     return errorResponse(res, 'Server error', 500);
   }
 };

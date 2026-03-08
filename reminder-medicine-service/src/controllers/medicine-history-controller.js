@@ -104,6 +104,7 @@ const getMedicineHistory = async (req, res) => {
       riwayat: history,
     });
   } catch (err) {
+    console.error('ERROR DETAIL:', err);
     return errorResponse(res, 'Server error', 500);
   }
 };

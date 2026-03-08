@@ -1,37 +1,29 @@
 const mongoose = require('mongoose');
 
-const obatSchema = new mongoose.Schema(
+const medicineHistorySchema = new mongoose.Schema(
   {
+    id_obat: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, 'ID obat wajib diisi'],
+      ref: 'Obat',
+    },
     id_user: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, 'ID user wajib diisi'],
       ref: 'User',
-    },
-    nama_obat: {
-      type: String,
-      required: [true, 'Nama obat wajib diisi'],
-      trim: true,
-    },
-    dosis: {
-      type: String,
-      required: [true, 'Dosis wajib diisi'],
-      trim: true,
 
     },
-    waktu_minum: {
-      type: [String],
-      required: [true, 'Waktu minum wajib diisi'],
-      validate: {
-        validator: function (arr) {
-          if (arr.length === 0) return false;
-          return arr.every((time) => /^([0-1]\d|2[0-3]):[0-5]\d$/.test(time));
-        },
-        message: 'Format waktu minum harus HH:MM, contoh: 07:00',
-      },
+    tanggal: {
+      type: Date,
+      required: [true, 'Tanggal wajib diisi'],
     },
-    aktif: {
+    status_minum: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    waktu_konfirmasi: {
+      type: Date,
+      default: null,
     },
   },
   {
@@ -39,4 +31,6 @@ const obatSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Obat', obatSchema);
+medicineHistorySchema.index({ id_obat: 1, tanggal: 1 }, { unique: true });
+
+module.exports = mongoose.model('MedicineHistory', medicineHistorySchema);
