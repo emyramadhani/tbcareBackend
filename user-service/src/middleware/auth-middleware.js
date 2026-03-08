@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { errorResponse } = require('../utils/response');
-const BlacklistedToken = require('../models/blacklistedToken');
+const BlacklistedToken = require('../models/blacklisted-token');
 
 const authMiddleware = async (req, res, next) => { 
   const userIdFromGateway = req.headers['x-user-id'];

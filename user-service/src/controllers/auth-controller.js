@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/user');
-const BlacklistedToken = require('../models/blacklistedToken');
+const BlacklistedToken = require('../models/blacklisted-token');
 const { successResponse, errorResponse } = require('../utils/response');
 
 

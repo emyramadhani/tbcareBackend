@@ -4,8 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 
-const authRoutes = require('./routes/authRoutes');
-const profileRoutes = require('./routes/profileRoutes');
+const authRoutes = require('./routes/auth-routes');
+const profileRoutes = require('./routes/profile-routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;

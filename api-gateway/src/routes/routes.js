@@ -1,5 +1,5 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const authMiddleware = require('../../src/middleware/authMiddleware');
+const authMiddleware = require('../../src/middleware/auth-middleware');
 
 const router = require('express').Router();
 
