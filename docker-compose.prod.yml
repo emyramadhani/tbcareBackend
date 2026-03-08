@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+
+  mongodb:
+    image: mongo:6.0
+    container_name: tbcare-mongodb
+    restart: always       
+
+    environment:
+      - MONGO_INITDB_DATABASE=tbcare
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - tbcare-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: tbcare-api-gateway
+    restart: always
+    ports:
+      - "3000:3000"         
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
+      - USER_SERVICE_URL=http://user-service:3001
+      - REMINDER_SERVICE_URL=http://reminder-medicine-service:3003
+    depends_on:
+      - user-service
+      - reminder-medicine-service
+    networks:
+      - tbcare-network
+
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: tbcare-user-service
+    restart: always
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongodb:27017/tbcare
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=7d
+    depends_on:
+      - mongodb
+    networks:
+      - tbcare-network
+
+  reminder-medicine-service:
+    build:
+      context: ./reminder-medicine-service
+      dockerfile: Dockerfile
+    container_name: tbcare-reminder-service
+    restart: always
+    environment:
+      - PORT=3003
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongodb:27017/tbcare
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongodb
+    networks:
+      - tbcare-network
+
+networks:
+  tbcare-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
