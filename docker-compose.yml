@@ -26,6 +26,7 @@ services:
       - tbcare-network
     volumes:
       - ./api-gateway/src:/app/src
+    command: npm run dev
 
 
   user-service:
@@ -47,7 +48,8 @@ services:
     networks:
       - tbcare-network
     volumes:
-      - ./user-service/src:/app/src 
+      - ./user-service/src:/app/src
+    command: npm run dev
 
 
   reminder-medicine-service:
@@ -69,11 +71,11 @@ services:
       - tbcare-network
     volumes:
       - ./reminder-medicine-service/src:/app/src
+    command: npm run dev
 
 networks:
   tbcare-network:
     driver: bridge
-
 
 volumes:
   mongodb_data:
