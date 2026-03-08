@@ -39,4 +39,4 @@ const obatSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Obat', obatSchema);
+module.exports = mongoose.model('Obat', obatSchema, 'obat');

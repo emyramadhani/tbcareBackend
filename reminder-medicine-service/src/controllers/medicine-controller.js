@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const Obat = require('../models/medicine');
+const MedicineHistory = require('../models/medicine-history');
 const { successResponse, errorResponse } = require('../utils/response');
 
 
@@ -94,19 +95,16 @@ const updateObat = async (req, res) => {
 
 const deleteObat = async (req, res) => {
   try {
-    const obat = await Obat.findOneAndUpdate(
-      {
-        _id: req.params.id,
-        id_user: req.userId,
-        aktif: true,
-      },
-      { aktif: false },
-      { returnDocument: 'after' }
-    );
+    const obat = await Obat.findOneAndDelete({
+      _id: req.params.id,
+      id_user: req.userId,
+    });
 
     if (!obat) {
       return errorResponse(res, 'Obat tidak ditemukan', 404);
     }
+
+    await MedicineHistory.deleteMany({ id_obat: req.params.id });
 
     return successResponse(res, 'Obat berhasil dihapus');
   } catch (err) {

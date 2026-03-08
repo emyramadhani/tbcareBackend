@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const obatRoutes = require('./routes/medicine-routes');
 const medicineHistoryRoutes = require('./routes/medicine-history-routes');
+const scheduleRoutes = require('./routes/schedule-routes');
 
 const app = express();
 const PORT = process.env.PORT || 3003;
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/obat', obatRoutes);
 app.use('/api/riwayat-obat', medicineHistoryRoutes);
+app.use('/api/jadwal', scheduleRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route tidak ditemukan' });

@@ -33,4 +33,4 @@ const medicineHistorySchema = new mongoose.Schema(
 
 medicineHistorySchema.index({ id_obat: 1, tanggal: 1 }, { unique: true });
 
-module.exports = mongoose.model('MedicineHistory', medicineHistorySchema);
+module.exports = mongoose.model('MedicineHistory', medicineHistorySchema, 'riwayat_minum_obat');
