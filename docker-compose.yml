@@ -73,6 +73,26 @@ services:
       - ./reminder-medicine-service/src:/app/src
     command: npm run dev
 
+  education-service:
+    build:
+      context: ./education-service
+      dockerfile: Dockerfile
+    container_name: tbcare-education-service
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - tbcare-network
+    volumes:
+      - ./edukasi-service/src:/app/src
+      - ./edukasi-service/uploads:/app/uploads    # ← penting! video tidak hilang saat restart
+    command: npm run dev
+
 networks:
   tbcare-network:
     driver: bridge
