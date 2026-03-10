@@ -89,8 +89,8 @@ services:
     networks:
       - tbcare-network
     volumes:
-      - ./edukasi-service/src:/app/src
-      - ./edukasi-service/uploads:/app/uploads    # ← penting! video tidak hilang saat restart
+      - ./education-service/src:/app/src
+      - ./education-service/uploads:/app/uploads    # ← penting! video tidak hilang saat restart
     command: npm run dev
 
 networks:
