@@ -11,7 +11,6 @@ router.use(authMiddleware);
 router.get('/', getAllKonten);
 router.get('/:id', getKontenById);
 
-// HANYA BISA DIAKSES OLEH ADMIN
 router.post('/', isAdmin, uploadVideo, createKonten);
 router.put('/:id', isAdmin, uploadVideo, updateKonten);
 router.delete('/:id', isAdmin, deleteKonten);
