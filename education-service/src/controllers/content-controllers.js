@@ -56,16 +56,21 @@ const getKontenById = async (req, res) => {
     return successResponse(res, 'Berhasil mengambil detail konten', konten);
   } catch (err) {
     console.error('ERROR getKontenById:', err);
+    
+    if (err.name === 'CastError' && err.kind === 'ObjectId') {
+      return errorResponse(res, 'Format ID konten tidak valid', 400);
+    }
+
     return errorResponse(res, 'Server error', 500);
   }
 };
 
 const createKonten = async (req, res) => {
   try {
-    const { judul, deskripsi, tipe, kategori, isi } = req.body;
+
+    const { judul, deskripsi, tipe, kategori, isi } = req.body || {};
 
     if (!judul || !tipe) {
-
       if (req.file) hapusFileVideo(req.file.filename);
       return errorResponse(res, 'Judul dan tipe wajib diisi', 400);
     }
@@ -83,7 +88,6 @@ const createKonten = async (req, res) => {
       return errorResponse(res, 'File video wajib diupload untuk konten bertipe video', 400);
     }
 
-
     const url_video = req.file ? `/videos/${req.file.filename}` : null;
 
     const konten = await Konten.create({
@@ -99,6 +103,13 @@ const createKonten = async (req, res) => {
   } catch (err) {
     if (req.file) hapusFileVideo(req.file.filename);
     console.error('ERROR createKonten:', err);
+
+    if (err.name === 'ValidationError') {
+
+      const messages = Object.values(err.errors).map(val => val.message);
+      return errorResponse(res, `Validasi gagal: ${messages.join(', ')}`, 400);
+    }
+
     return errorResponse(res, 'Server error', 500);
   }
 };
@@ -112,7 +123,7 @@ const updateKonten = async (req, res) => {
       return errorResponse(res, 'Konten tidak ditemukan', 404);
     }
 
-    const { judul, deskripsi, kategori, isi } = req.body;
+    const { judul, deskripsi, kategori, isi } = req.body || {};
 
     if (req.file && konten.url_video) {
       hapusFileVideo(konten.url_video);
@@ -136,6 +147,16 @@ const updateKonten = async (req, res) => {
   } catch (err) {
     if (req.file) hapusFileVideo(req.file.filename);
     console.error('ERROR updateKonten:', err);
+
+    // PERBAIKAN: Penanganan Error format ID dan Validasi
+    if (err.name === 'CastError' && err.kind === 'ObjectId') {
+      return errorResponse(res, 'Format ID konten tidak valid', 400);
+    }
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(val => val.message);
+      return errorResponse(res, `Validasi gagal: ${messages.join(', ')}`, 400);
+    }
+
     return errorResponse(res, 'Server error', 500);
   }
 };
@@ -155,6 +176,11 @@ const deleteKonten = async (req, res) => {
     return successResponse(res, 'Konten berhasil dihapus');
   } catch (err) {
     console.error('ERROR deleteKonten:', err);
+
+    if (err.name === 'CastError' && err.kind === 'ObjectId') {
+      return errorResponse(res, 'Format ID konten tidak valid', 400);
+    }
+
     return errorResponse(res, 'Server error', 500);
   }
 };
