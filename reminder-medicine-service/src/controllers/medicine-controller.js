@@ -3,7 +3,6 @@ const Obat = require('../models/medicine');
 const MedicineHistory = require('../models/medicine-history');
 const { successResponse, errorResponse } = require('../utils/response');
 
-
 const createObat = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -11,7 +10,12 @@ const createObat = async (req, res) => {
   }
 
   try {
-    const { nama_obat, dosis, waktu_minum } = req.body;
+
+    const { nama_obat, dosis, waktu_minum } = req.body || {};
+
+    if (!nama_obat || !dosis || !waktu_minum) {
+        return errorResponse(res, 'Nama obat, dosis, dan waktu minum wajib diisi', 400);
+    }
 
     const obat = await Obat.create({
       id_user: req.userId,
@@ -22,15 +26,19 @@ const createObat = async (req, res) => {
 
     return successResponse(res, 'Obat berhasil ditambahkan', obat, 201);
   } catch (err) {
-    console.error('ERROR DETAIL:', err);
+    console.error('ERROR createObat:', err);
+    
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(val => val.message);
+      return errorResponse(res, `Validasi gagal: ${messages.join(', ')}`, 400);
+    }
+
     return errorResponse(res, 'Server error', 500);
   }
 };
 
-
 const getAllObat = async (req, res) => {
   try {
-
     const obatList = await Obat.find({
       id_user: req.userId,
       aktif: true,
@@ -38,11 +46,10 @@ const getAllObat = async (req, res) => {
 
     return successResponse(res, 'Berhasil mengambil data obat', obatList);
   } catch (err) {
-    console.error('ERROR DETAIL:', err);
+    console.error('ERROR getAllObat:', err);
     return errorResponse(res, 'Server error', 500);
   }
 };
-
 
 const getObatById = async (req, res) => {
   try {
@@ -58,7 +65,12 @@ const getObatById = async (req, res) => {
 
     return successResponse(res, 'Berhasil mengambil detail obat', obat);
   } catch (err) {
-    console.error('ERROR DETAIL:', err);
+    console.error('ERROR getObatById:', err);
+    
+    if (err.name === 'CastError' && err.kind === 'ObjectId') {
+      return errorResponse(res, 'Format ID obat tidak valid', 400);
+    }
+
     return errorResponse(res, 'Server error', 500);
   }
 };
@@ -70,7 +82,8 @@ const updateObat = async (req, res) => {
   }
 
   try {
-    const { nama_obat, dosis, waktu_minum } = req.body;
+
+    const { nama_obat, dosis, waktu_minum } = req.body || {};
 
     const obat = await Obat.findOneAndUpdate(
       {
@@ -88,7 +101,16 @@ const updateObat = async (req, res) => {
 
     return successResponse(res, 'Obat berhasil diperbarui', obat);
   } catch (err) {
-    console.error('ERROR DETAIL:', err);
+    console.error('ERROR updateObat:', err);
+
+    if (err.name === 'CastError' && err.kind === 'ObjectId') {
+      return errorResponse(res, 'Format ID obat tidak valid', 400);
+    }
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(val => val.message);
+      return errorResponse(res, `Validasi gagal: ${messages.join(', ')}`, 400);
+    }
+
     return errorResponse(res, 'Server error', 500);
   }
 };
@@ -108,7 +130,12 @@ const deleteObat = async (req, res) => {
 
     return successResponse(res, 'Obat berhasil dihapus');
   } catch (err) {
-    console.error('ERROR DETAIL:', err);
+    console.error('ERROR deleteObat:', err);
+
+    if (err.name === 'CastError' && err.kind === 'ObjectId') {
+      return errorResponse(res, 'Format ID obat tidak valid', 400);
+    }
+
     return errorResponse(res, 'Server error', 500);
   }
 };
