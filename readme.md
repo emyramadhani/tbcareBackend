@@ -8,132 +8,89 @@ Backend untuk aplikasi mobile TBCare menggunakan arsitektur Microservices.
 
 - **Runtime:** Node.js + Express.js
 - **Database:** MongoDB + Mongoose
-- **Auth:** JSON Web Token (JWT)
+- **Auth:** JSON Web Token (JWT) & Blacklisted Token Mechanism
 - **Arsitektur:** Microservices + API Gateway
+- **Orchestration:** Docker & Docker Compose
 
 ---
 
 ## Struktur Folder
-```
+
+Berikut adalah struktur direktori aplikasi yang telah terimplementasi:
+
+```text
 tbcare-backend/
 ├── api-gateway/
 │   ├── src/
 │   │   ├── middleware/
-│   │   │   └── authMiddleware.js
+│   │   │   └── auth-middleware.js
 │   │   ├── routes/
-│   │   │   └── proxy.js
-│   │   └── index.js
-│   ├── .env
+│   │   │   └── routes.js
+│   │   └── server.js
+│   ├── Dockerfile
 │   └── package.json
 │
 ├── user-service/
 │   ├── src/
 │   │   ├── models/
-│   │   │   └── User.js
+│   │   │   ├── blacklisted-token.js
+│   │   │   └── user.js
 │   │   ├── controllers/
-│   │   │   ├── authController.js
-│   │   │   └── profileController.js
+│   │   │   ├── auth-controller.js
+│   │   │   └── profile-controller.js
 │   │   ├── routes/
-│   │   │   ├── authRoutes.js
-│   │   │   └── profileRoutes.js
+│   │   │   ├── auth-routes.js
+│   │   │   └── profile-routes.js
 │   │   ├── middleware/
-│   │   │   └── authMiddleware.js
+│   │   │   └── auth-middleware.js
 │   │   ├── utils/
 │   │   │   └── response.js
-│   │   └── index.js
-│   ├── .env
+│   │   └── server.js
+│   ├── Dockerfile
 │   └── package.json
 │
-├── reminder-service/
+├── reminder-medicine-service/
 │   ├── src/
 │   │   ├── models/
-│   │   │   ├── Obat.js
-│   │   │   ├── RiwayatMinum.js
-│   │   │   └── Notifikasi.js
+│   │   │   ├── medicine.js
+│   │   │   └── medicine-history.js
 │   │   ├── controllers/
-│   │   │   ├── obatController.js
-│   │   │   ├── riwayatController.js
-│   │   │   └── notifikasiController.js
+│   │   │   ├── medicine-controller.js
+│   │   │   ├── medicine-history-controller.js
+│   │   │   └── schedule-controller.js
 │   │   ├── routes/
-│   │   │   ├── obatRoutes.js
-│   │   │   ├── riwayatRoutes.js
-│   │   │   └── notifikasiRoutes.js
+│   │   │   ├── medicine-routes.js
+│   │   │   ├── medicine-history-routes.js
+│   │   │   └── schedule-routes.js
 │   │   ├── middleware/
-│   │   │   └── authMiddleware.js
+│   │   │   └── auth-middleware.js
 │   │   ├── utils/
 │   │   │   └── response.js
-│   │   └── index.js
+│   │   └── server.js
 │   ├── .env
+│   ├── Dockerfile
 │   └── package.json
 │
-├── skrining-service/
+├── education-service/
 │   ├── src/
 │   │   ├── models/
-│   │   │   ├── Pertanyaan.js
-│   │   │   └── Skrining.js
+│   │   │   └── content.js
 │   │   ├── controllers/
-│   │   │   ├── pertanyaanController.js
-│   │   │   └── skriningController.js
+│   │   │   └── content-controllers.js
 │   │   ├── routes/
-│   │   │   ├── pertanyaanRoutes.js
-│   │   │   └── skriningRoutes.js
+│   │   │   └── content-routes.js
 │   │   ├── middleware/
-│   │   │   └── authMiddleware.js
-│   │   ├── utils/
-│   │   │   ├── response.js
-│   │   │   └── risikoClassifier.js
-│   │   └── index.js
-│   ├── .env
-│   └── package.json
-│
-├── edukasi-service/
-│   ├── src/
-│   │   ├── models/
-│   │   │   └── Konten.js
-│   │   ├── controllers/
-│   │   │   └── kontenController.js
-│   │   ├── routes/
-│   │   │   └── kontenRoutes.js
-│   │   ├── middleware/
-│   │   │   └── authMiddleware.js
+│   │   │   ├── auth-middleware.js
+│   │   │   ├── role-middleware.js
+│   │   │   └── upload-middleware.js
 │   │   ├── utils/
 │   │   │   └── response.js
-│   │   └── index.js
-│   ├── .env
+│   │   └── server.js
+│   ├── Dockerfile
 │   └── package.json
 │
-├── chatbot-service/
-│   ├── src/
-│   │   ├── models/
-│   │   │   └── ChatHistory.js
-│   │   ├── controllers/
-│   │   │   └── chatController.js
-│   │   ├── routes/
-│   │   │   └── chatRoutes.js
-│   │   ├── middleware/
-│   │   │   └── authMiddleware.js
-│   │   ├── utils/
-│   │   │   └── response.js
-│   │   └── index.js
-│   ├── .env
-│   └── package.json
-│
-├── layanan-kesehatan-service/
-│   ├── src/
-│   │   ├── models/
-│   │   │   └── Layanan.js
-│   │   ├── controllers/
-│   │   │   └── layananController.js
-│   │   ├── routes/
-│   │   │   └── layananRoutes.js
-│   │   ├── middleware/
-│   │   │   └── authMiddleware.js
-│   │   ├── utils/
-│   │   │   └── response.js
-│   │   └── index.js
-│   ├── .env
-│   └── package.json
-│
+├── docker-compose.yml
+├── docker-compose.prod.yml
 ├── .gitignore
 ├── .env.example
 └── README.md
@@ -143,9 +100,11 @@ tbcare-backend/
 
 ## API Endpoints
 
-Semua request melalui **API Gateway** di `http://localhost:3000`.
+Semua request melalui **API Gateway** di `http://localhost:3000` *(atau `5000` jika menggunakan default port dari docker-compose)*.
 
+> `-` = Publik (Tidak membutuhkan token)
 > `🔒` = Membutuhkan header `Authorization: Bearer <token>`
+> `🔐` = Membutuhkan header `Authorization: Bearer <token>` (Khusus **Admin**)
 
 ---
 
@@ -155,6 +114,7 @@ Semua request melalui **API Gateway** di `http://localhost:3000`.
 |--------|----------|-----------|------|
 | POST | `/auth/register` | Registrasi akun baru | - |
 | POST | `/auth/login` | Login dan dapatkan token | - |
+| POST | `/auth/logout` | Logout akun (Blacklist token) | 🔒 |
 
 ---
 
@@ -165,5 +125,49 @@ Semua request melalui **API Gateway** di `http://localhost:3000`.
 | GET | `/users/profile` | Ambil data profil | 🔒 |
 | PUT | `/users/profile` | Update nama & no telepon | 🔒 |
 | PUT | `/users/change-password` | Ganti password | 🔒 |
+
+---
+
+### Edukasi — `/api/education`
+
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| GET | `/education` | Ambil seluruh konten edukasi (mendukung filter query) | 🔒 |
+| GET | `/education/:id` | Ambil detail spesifik satu konten edukasi | 🔒 |
+| POST | `/education` | Tambah konten baru (Mendukung upload Video/Artikel) | 🔐 |
+| PUT | `/education/:id` | Update data atau file konten edukasi | 🔐 |
+| DELETE | `/education/:id` | Hapus konten dan hapus file fisik video terkait | 🔐 |
+
+---
+
+### Obat (Medicine) — `/api/medicine`
+
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| GET | `/medicine` | Ambil daftar obat milik user | 🔒 |
+| POST | `/medicine` | Tambah data obat baru ke daftar | 🔒 |
+| GET | `/medicine/:id` | Ambil detail informasi obat tertentu | 🔒 |
+| PUT | `/medicine/:id` | Update data obat | 🔒 |
+| DELETE | `/medicine/:id` | Hapus data obat dari daftar | 🔒 |
+
+---
+
+### Riwayat Minum Obat — `/api/medicine-history`
+
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| GET | `/medicine-history` | Ambil rekam riwayat kepatuhan minum obat user | 🔒 |
+| POST | `/medicine-history` | Catat dan tandai bahwa obat telah diminum | 🔒 |
+
+---
+
+### Jadwal Pengingat — `/api/schedule`
+
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| GET | `/schedule` | Ambil seluruh jadwal pengingat minum obat user | 🔒 |
+| POST | `/schedule` | Buat jadwal pengingat minum obat baru | 🔒 |
+| PUT | `/schedule/:id` | Update waktu atau jadwal pengingat | 🔒 |
+| DELETE | `/schedule/:id` | Hapus jadwal pengingat | 🔒 |
 
 ---
