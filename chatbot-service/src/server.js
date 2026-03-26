@@ -5,12 +5,11 @@ const cors = require('cors');
 const chatRoutes = require('./routes/chat-routes');
 
 const app = express();
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PORT || 3004;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 mongoose
   .connect(process.env.MONGO_URI)
