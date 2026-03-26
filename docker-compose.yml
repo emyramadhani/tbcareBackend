@@ -19,6 +19,8 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - USER_SERVICE_URL=http://user-service:3001
       - REMINDER_SERVICE_URL=http://reminder-medicine-service:3003
+      - EDUCATION_SERVICE_URL=http://education-service:3002
+      - SKRINING_SERVICE_URL=http://skrining-service:3005
     depends_on:
       - user-service
       - reminder-medicine-service

@@ -27,7 +27,7 @@ const screeningQuestionSchema = new mongoose.Schema(
   }
 );
 
-screeningQuestionSchema.index({ urutan: 1 });
+// screeningQuestionSchema.index({ urutan: 1 });
 
 module.exports = mongoose.model(
   'SkriningPertanyaan',

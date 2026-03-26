@@ -24,7 +24,8 @@ const authMiddleware = (req, res, next) => {
     req.userId = decoded.id;
     req.userRole = decoded.role; 
     
-    req.headers['x-user-role'] = decoded.role; 
+    req.headers['x-user-id'] = decoded.id; 
+    req.headers['x-user-role'] = decoded.role
     
     next();
   } catch (err) {
