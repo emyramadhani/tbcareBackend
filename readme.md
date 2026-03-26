@@ -15,9 +15,6 @@ Backend untuk aplikasi mobile TBCare menggunakan arsitektur Microservices.
 ---
 
 ## Struktur Folder
-
-Berikut adalah struktur direktori aplikasi yang telah terimplementasi:
-
 ```text
 tbcare-backend/
 ├── api-gateway/
@@ -89,6 +86,31 @@ tbcare-backend/
 │   ├── Dockerfile
 │   └── package.json
 │
+├── skrining-service/
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── risk-config.js
+│   │   ├── controllers/
+│   │   │   ├── question-controller.js
+│   │   │   └── screening-controller.js
+│   │   ├── middleware/
+│   │   │   └── auth-middleware.js
+│   │   ├── models/
+│   │   │   ├── screening-detail.js
+│   │   │   ├── screening-question.js
+│   │   │   └── screening.js
+│   │   ├── routes/
+│   │   │   ├── question-routes.js
+│   │   │   └── screening-routes.js
+│   │   ├── seeders/
+│   │   │   └── question-seeder.js
+│   │   ├── utils/
+│   │   │   ├── response.js
+│   │   │   └── risk-classifier.js
+│   │   └── server.js
+│   ├── Dockerfile
+│   └── package.json
+│
 ├── docker-compose.yml
 ├── docker-compose.prod.yml
 ├── .gitignore
@@ -100,7 +122,7 @@ tbcare-backend/
 
 ## API Endpoints
 
-Semua request melalui **API Gateway** di `http://localhost:3000` *(atau `5000` jika menggunakan default port dari docker-compose)*.
+Semua request melalui **API Gateway** di `http://localhost:3000`.
 
 > `-` = Publik (Tidak membutuhkan token)
 > `🔒` = Membutuhkan header `Authorization: Bearer <token>`
@@ -128,46 +150,56 @@ Semua request melalui **API Gateway** di `http://localhost:3000` *(atau `5000` j
 
 ---
 
-### Edukasi — `/api/education`
+### Edukasi & Konten — `/api/konten`
 
 | Method | Endpoint | Deskripsi | Auth |
 |--------|----------|-----------|------|
-| GET | `/education` | Ambil seluruh konten edukasi (mendukung filter query) | 🔒 |
-| GET | `/education/:id` | Ambil detail spesifik satu konten edukasi | 🔒 |
-| POST | `/education` | Tambah konten baru (Mendukung upload Video/Artikel) | 🔐 |
-| PUT | `/education/:id` | Update data atau file konten edukasi | 🔐 |
-| DELETE | `/education/:id` | Hapus konten dan hapus file fisik video terkait | 🔐 |
+| GET | `/konten` | Ambil seluruh konten edukasi (mendukung filter query) | 🔒 |
+| GET | `/konten/:id` | Ambil detail spesifik satu konten edukasi | 🔒 |
+| POST | `/konten` | Tambah konten baru (Mendukung upload Video/Artikel) | 🔐 |
+| PUT | `/konten/:id` | Update data atau file konten edukasi | 🔐 |
+| DELETE | `/konten/:id` | Hapus konten dan hapus file fisik video terkait | 🔐 |
 
 ---
 
-### Obat (Medicine) — `/api/medicine`
+### Obat (Medicine) — `/api/obat`
 
 | Method | Endpoint | Deskripsi | Auth |
 |--------|----------|-----------|------|
-| GET | `/medicine` | Ambil daftar obat milik user | 🔒 |
-| POST | `/medicine` | Tambah data obat baru ke daftar | 🔒 |
-| GET | `/medicine/:id` | Ambil detail informasi obat tertentu | 🔒 |
-| PUT | `/medicine/:id` | Update data obat | 🔒 |
-| DELETE | `/medicine/:id` | Hapus data obat dari daftar | 🔒 |
+| GET | `/obat` | Ambil daftar obat milik user | 🔒 |
+| POST | `/obat` | Tambah data obat baru ke daftar | 🔒 |
+| GET | `/obat/:id` | Ambil detail informasi obat tertentu | 🔒 |
+| PUT | `/obat/:id` | Update data obat | 🔒 |
+| DELETE | `/obat/:id` | Hapus data obat dari daftar | 🔒 |
 
 ---
 
-### Riwayat Minum Obat — `/api/medicine-history`
+### Riwayat Minum Obat — `/api/riwayat-obat`
 
 | Method | Endpoint | Deskripsi | Auth |
 |--------|----------|-----------|------|
-| GET | `/medicine-history` | Ambil rekam riwayat kepatuhan minum obat user | 🔒 |
-| POST | `/medicine-history` | Catat dan tandai bahwa obat telah diminum | 🔒 |
+| GET | `/riwayat-obat` | Ambil rekam riwayat kepatuhan minum obat user | 🔒 |
+| POST | `/riwayat-obat` | Catat dan tandai bahwa obat telah diminum | 🔒 |
 
 ---
 
-### Jadwal Pengingat — `/api/schedule`
+### Jadwal Pengingat — `/api/jadwal`
 
 | Method | Endpoint | Deskripsi | Auth |
 |--------|----------|-----------|------|
-| GET | `/schedule` | Ambil seluruh jadwal pengingat minum obat user | 🔒 |
-| POST | `/schedule` | Buat jadwal pengingat minum obat baru | 🔒 |
-| PUT | `/schedule/:id` | Update waktu atau jadwal pengingat | 🔒 |
-| DELETE | `/schedule/:id` | Hapus jadwal pengingat | 🔒 |
+| GET | `/jadwal/hari-ini` | Ambil jadwal pengingat minum obat hari ini | 🔒 |
+| GET | `/jadwal` | Ambil seluruh jadwal pengingat minum obat user | 🔒 |
+| POST | `/jadwal` | Buat jadwal pengingat minum obat baru | 🔒 |
+| PUT | `/jadwal/:id` | Update waktu atau jadwal pengingat | 🔒 |
+| DELETE | `/jadwal/:id` | Hapus jadwal pengingat | 🔒 |
 
 ---
+
+### Skrining TBC — `/api/skrining`
+
+| Method | Endpoint | Deskripsi | Auth |
+|--------|----------|-----------|------|
+| GET | `/skrining/pertanyaan` | Ambil daftar pertanyaan aktif untuk skrining | 🔒 |
+| POST | `/skrining` | Submit jawaban skrining dan kalkulasi tingkat risiko | 🔒 |
+| GET | `/skrining` | Ambil riwayat hasil skrining user | 🔒 |
+| GET | `/skrining/:id` | Ambil detail spesifik satu riwayat skrining beserta jawaban | 🔒 |
