@@ -100,7 +100,7 @@ const submitScreening = async (req, res) => {
 const getScreeningHistory = async (req, res) => {
   try {
     const riwayat = await Skrining.find({ id_user: req.userId })
-      .select('total_skor hasil_risiko tanggal_skrining createdAt -__v')
+      .select('total_skor hasil_risiko tanggal_skrining createdAt') 
       .sort({ createdAt: -1 });
 
     return successResponse(
