@@ -28,10 +28,12 @@ services:
       - USER_SERVICE_URL=http://user-service:3001
       - REMINDER_SERVICE_URL=http://reminder-medicine-service:3003
       - EDUCATION_SERVICE_URL=http://education-service:3002
+      - SKRINING_SERVICE_URL=http://skrining-service:3005 
     depends_on:
       - user-service
       - reminder-medicine-service
       - education-service
+      - skrining-service                                
     networks:
       - tbcare-network
 
@@ -86,10 +88,27 @@ services:
     volumes:
       - education_uploads:/app/uploads 
 
+
+  skrining-service:
+    build:
+      context: ./skrining-service
+      dockerfile: Dockerfile
+    container_name: tbcare-skrining-service
+    restart: always
+    environment:
+      - PORT=3005
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongodb:27017/tbcare
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongodb
+    networks:
+      - tbcare-network
+
 networks:
   tbcare-network:
     driver: bridge
 
 volumes:
   mongodb_data:
-  education_uploads:  
+  education_uploads:
