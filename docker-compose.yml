@@ -107,12 +107,11 @@ services:
       - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongodb
-
-  networks:
-    - tbcare-network
-  volumes:
-    - ./skrining-service/src:/app/src
-  command: npm run dev
+    networks:
+      - tbcare-network
+    volumes:
+      - ./skrining-service/src:/app/src
+    command: npm run dev
 
 networks:
   tbcare-network:
