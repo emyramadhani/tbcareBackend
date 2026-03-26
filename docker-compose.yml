@@ -1,9 +1,14 @@
 version: '3.8'
 
 services:
-
   mongodb:
     image: mongo:6.0
+    container_name: tbcare-mongodb-dev
+    restart: unless-stopped
+    ports:
+      - "27017:27017" # Membuka port agar bisa diakses Compass saat dev
+    networks:
+      - tbcare-network
 
   api-gateway:
     build:
@@ -21,15 +26,18 @@ services:
       - REMINDER_SERVICE_URL=http://reminder-medicine-service:3003
       - EDUCATION_SERVICE_URL=http://education-service:3002
       - SKRINING_SERVICE_URL=http://skrining-service:3005
+      - CHATBOT_SERVICE_URL=http://chatbot-service:5006
     depends_on:
       - user-service
       - reminder-medicine-service
+      - education-service
+      - skrining-service
+      - chatbot-service
     networks:
       - tbcare-network
     volumes:
       - ./api-gateway/src:/app/src
     command: npm run dev
-
 
   user-service:
     build:
@@ -42,7 +50,7 @@ services:
     environment:
       - PORT=3001
       - NODE_ENV=development
-      - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
+      - MONGO_URI=mongodb://mongodb:27017/tbcare
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRES_IN=7d
     depends_on:
@@ -64,7 +72,7 @@ services:
     environment:
       - PORT=3003
       - NODE_ENV=development
-      - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
+      - MONGO_URI=mongodb://mongodb:27017/tbcare
       - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongodb
@@ -85,13 +93,15 @@ services:
     environment:
       - PORT=3002
       - NODE_ENV=development
-      - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
+      - MONGO_URI=mongodb://mongodb:27017/tbcare
       - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongodb
     networks:
       - tbcare-network
     volumes:
       - ./education-service/src:/app/src
-      - ./education-service/uploads:/app/uploads    # ← penting! video tidak hilang saat restart
+      - ./education-service/uploads:/app/uploads
     command: npm run dev
 
   skrining-service:
@@ -105,7 +115,7 @@ services:
     environment:
       - PORT=3005
       - NODE_ENV=development
-      - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
+      - MONGO_URI=mongodb://mongodb:27017/tbcare
       - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongodb
@@ -113,6 +123,27 @@ services:
       - tbcare-network
     volumes:
       - ./skrining-service/src:/app/src
+    command: npm run dev
+
+  chatbot-service:
+    build:
+      context: ./chatbot-service
+      dockerfile: Dockerfile
+    container_name: tbcare-chatbot-service
+    restart: unless-stopped
+    ports:
+      - "3004:3004"
+    environment:
+      - PORT=3004
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongodb:27017/tbcare
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongodb
+    networks:
+      - tbcare-network
+    volumes:
+      - ./chatbot-service/src:/app/src
     command: npm run dev
 
 networks:
