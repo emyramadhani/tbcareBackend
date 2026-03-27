@@ -10,8 +10,8 @@ const layananKesehatanSchema = new mongoose.Schema(
     jenis: {
       type: String,
       enum: {
-        values: ['Puskesmas', 'Rumah Sakit', 'Klinik'],
-        message: 'Jenis layanan harus Puskesmas, Rumah Sakit, atau Klinik',
+        values: ['UPTPAS', 'PMD', 'Klinik', 'BBKPM-BPKMB-P4'],
+        message: 'Jenis layanan harus salah satu dari: UPTPAS, PMD, Klinik, BBKPM-BPKMB-P4',
       },
       required: [true, 'Jenis layanan wajib diisi'],
     },
