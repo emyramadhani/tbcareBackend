@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const layananKesehatanSchema = new mongoose.Schema(
+const healthServiceSchema = new mongoose.Schema(
   {
     nama_faskes: {
       type: String,
@@ -20,19 +20,20 @@ const layananKesehatanSchema = new mongoose.Schema(
       required: [true, 'Alamat wajib diisi'],
       trim: true,
     },
+
     jam_buka: {
       type: String,
-      required: [true, 'Jam buka wajib diisi'],
+      default: '-', 
       trim: true,
     },
     no_telepon: {
       type: String,
-      default: '-',
+      default: '-', 
       trim: true,
     },
     gambar_url: {
       type: String,
-      default: null,
+      default: null, 
     },
   },
   {
@@ -40,7 +41,6 @@ const layananKesehatanSchema = new mongoose.Schema(
   }
 );
 
+healthServiceSchema.index({ nama_faskes: 1 });
 
-layananKesehatanSchema.index({ nama_faskes: 1 });
-
-module.exports = mongoose.model('LayananKesehatan', layananKesehatanSchema, 'layanan_kesehatan');
+module.exports = mongoose.model('HealthService', healthServiceSchema, 'health_services');
