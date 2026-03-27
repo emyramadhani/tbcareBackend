@@ -24,6 +24,6 @@ router.use('/api/edukasi', authMiddleware, proxy(process.env.EDUKASI_SERVICE_URL
 router.use('/api/medicine', authMiddleware, proxy(process.env.MEDICINE_SERVICE_URL));
 router.use('/api/chatbot', authMiddleware, proxy(process.env.CHATBOT_SERVICE_URL));
 router.use('/api/skrining', authMiddleware, proxy(process.env.SKRINING_SERVICE_URL));
-router.use('/api/layanan', authMiddleware, proxy(process.env.LAYANAN_SERVICE_URL));
+router.use('/api/layanan', authMiddleware, proxy(process.env.HEALTH_SERVICE_URL));
 
 module.exports = router;
