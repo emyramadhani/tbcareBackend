@@ -4,7 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 
-const layananRoutes = require('./routes/layanan-routes');
+const layananRoutes = require('./routes/health-service-routes');
 
 const app = express();
 const PORT = process.env.PORT || 3006;
