@@ -17,7 +17,7 @@ app.use(express.json());
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log('MongoDB connected - Layanan Service');
+    console.log('MongoDB connected - Health Service');
   })
   .catch((err) => {
     console.error('MongoDB connection error:', err);
@@ -25,7 +25,7 @@ mongoose
   });
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'layanan-service' });
+  res.json({ status: 'ok', service: 'health-service' });
 });
 
 app.use('/api/layanan-kesehatan', layananRoutes);
