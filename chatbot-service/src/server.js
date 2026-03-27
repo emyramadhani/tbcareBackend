@@ -5,7 +5,7 @@ const cors = require('cors');
 const chatRoutes = require('./routes/chat-routes');
 
 const app = express();
-const PORT = process.env.PORT || 3004;
+const PORT = process.env.PORT || 5006; 
 
 app.use(cors());
 app.use(express.json());
@@ -13,9 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(async () => {
-    console.log('MongoDB connected - Skrining Service');
-    await seedQuestions();
+  .then(() => {
+    console.log('MongoDB connected - Chatbot Service');
   })
   .catch((err) => {
     console.error('MongoDB connection error:', err);
