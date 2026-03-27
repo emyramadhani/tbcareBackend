@@ -14,6 +14,20 @@ Backend untuk aplikasi mobile TBCare menggunakan arsitektur Microservices.
 
 ---
 
+## Arsitektur & Port
+
+| Service                      | Port | Status        |
+|------------------------------|------|---------------|
+| api-gateway                  | 3000 | ✅ Selesai    |
+| user-service                 | 3001 | ✅ Selesai    |
+| education-service            | 3002 | ✅ Selesai    |
+| reminder-medicine-service    | 3003 | ✅ Selesai    |
+| chatbot-service              | 3004 | ✅ Selesai    |
+| skrining-service             | 3005 | ✅ Selesai    |
+| layanan-kesehatan-service    | 3006 | ⏳ Pending    |
+
+---
+
 ## Struktur Folder
 ```text
 tbcare-backend/
@@ -24,6 +38,8 @@ tbcare-backend/
 │   │   ├── routes/
 │   │   │   └── routes.js
 │   │   └── server.js
+│   ├── .env
+│   ├── .gitignore
 │   ├── Dockerfile
 │   └── package.json
 │
@@ -43,6 +59,8 @@ tbcare-backend/
 │   │   ├── utils/
 │   │   │   └── response.js
 │   │   └── server.js
+│   ├── .env
+│   ├── .gitignore
 │   ├── Dockerfile
 │   └── package.json
 │
@@ -65,6 +83,7 @@ tbcare-backend/
 │   │   │   └── response.js
 │   │   └── server.js
 │   ├── .env
+│   ├── .gitignore
 │   ├── Dockerfile
 │   └── package.json
 │
@@ -83,6 +102,8 @@ tbcare-backend/
 │   │   ├── utils/
 │   │   │   └── response.js
 │   │   └── server.js
+│   ├── .env
+│   ├── .gitignore
 │   ├── Dockerfile
 │   └── package.json
 │
@@ -108,13 +129,34 @@ tbcare-backend/
 │   │   │   ├── response.js
 │   │   │   └── risk-classifier.js
 │   │   └── server.js
+│   ├── .env
+│   ├── .gitignore
+│   ├── Dockerfile
+│   └── package.json
+│
+├── chatbot-service/
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   └── chat-controller.js
+│   │   ├── middleware/
+│   │   │   └── auth-middleware.js
+│   │   ├── models/
+│   │   │   └── chat-history.js
+│   │   ├── routes/
+│   │   │   └── chat-routes.js
+│   │   ├── utils/
+│   │   │   └── response.js
+│   │   └── server.js
+│   ├── .env
+│   ├── .gitignore
 │   ├── Dockerfile
 │   └── package.json
 │
 ├── docker-compose.yml
 ├── docker-compose.prod.yml
 ├── .gitignore
-├── .env.example
+├── .env.prod
+├── .env
 └── README.md
 ```
 
@@ -203,3 +245,21 @@ Semua request melalui **API Gateway** di `http://localhost:3000`.
 | POST | `/skrining` | Submit jawaban skrining dan kalkulasi tingkat risiko | 🔒 |
 | GET | `/skrining` | Ambil riwayat hasil skrining user | 🔒 |
 | GET | `/skrining/:id` | Ambil detail spesifik satu riwayat skrining beserta jawaban | 🔒 |
+
+---
+
+### Chatbot AI — `/api/chatbot`
+
+| Method | Endpoint                        | Deskripsi                                                        | Auth |
+|--------|---------------------------------|------------------------------------------------------------------|------|
+| POST   | `/chatbot`                      | Menyimpan interaksi pesan user dan respon bot                    | 🔒   |
+| GET    | `/chatbot/history`              | Mengambil daftar sesi riwayat obrolan (mendukung paginasi)       | 🔒   |
+| GET    | `/chatbot/history/:session_id`  | Mengambil detail obrolan multi-turn berdasarkan Session ID       | 🔒   |
+| DELETE | `/chatbot/history/:session_id`  | Menghapus seluruh riwayat percakapan pada sesi tertentu          | 🔒   |
+
+> **Catatan Session:**
+> - Request **tanpa** `session_id` → backend generate UUID baru → sesi baru dimulai
+> - Request **dengan** `session_id` yang valid → melanjutkan sesi yang sama
+> - Riwayat percakapan otomatis dihapus setelah **90 hari** (TTL Index)
+
+---
