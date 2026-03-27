@@ -14,16 +14,18 @@ services:
       - NODE_ENV=development
       - JWT_SECRET=${JWT_SECRET}
       - USER_SERVICE_URL=http://user-service:3001
-      - REMINDER_SERVICE_URL=http://reminder-medicine-service:3003
       - EDUCATION_SERVICE_URL=http://education-service:3002
-      - SKRINING_SERVICE_URL=http://skrining-service:3005
+      - REMINDER_SERVICE_URL=http://reminder-medicine-service:3003
       - CHATBOT_SERVICE_URL=http://chatbot-service:3004
+      - SKRINING_SERVICE_URL=http://skrining-service:3005
+      - HEALTH_SERVICE_URL=http://health-service:3006
     depends_on:
       - user-service
       - reminder-medicine-service
       - education-service
       - skrining-service
       - chatbot-service
+      - health-service
     networks:
       - tbcare-network
     volumes:
@@ -125,6 +127,25 @@ services:
       - tbcare-network
     volumes:
       - ./chatbot-service/src:/app/src
+    command: npm run dev
+
+  health-service:
+    build:
+      context: ./health-service
+      dockerfile: Dockerfile
+    container_name: tbcare-health-service
+    restart: unless-stopped
+    ports:
+      - "3006:3006"
+    environment:
+      - PORT=3006
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - tbcare-network
+    volumes:
+      - ./health-service/src:/app/src
     command: npm run dev
 
 networks:
