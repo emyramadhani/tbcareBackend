@@ -16,15 +16,15 @@ Backend untuk aplikasi mobile TBCare menggunakan arsitektur Microservices.
 
 ## Arsitektur & Port
 
-| Service                      | Port | Status        |
-|------------------------------|------|---------------|
-| api-gateway                  | 3000 | ✅ Selesai    |
-| user-service                 | 3001 | ✅ Selesai    |
-| education-service            | 3002 | ✅ Selesai    |
-| reminder-medicine-service    | 3003 | ✅ Selesai    |
-| chatbot-service              | 3004 | ✅ Selesai    |
-| skrining-service             | 3005 | ✅ Selesai    |
-| layanan-kesehatan-service    | 3006 | ⏳ Pending    |
+| Service                   | Port | Status     |
+|---------------------------|------|------------|
+| api-gateway               | 3000 | ✅ Selesai |
+| user-service              | 3001 | ✅ Selesai |
+| education-service         | 3002 | ✅ Selesai |
+| reminder-medicine-service | 3003 | ✅ Selesai |
+| chatbot-service           | 3004 | ✅ Selesai |
+| skrining-service          | 3005 | ✅ Selesai |
+| health-service            | 3006 | ✅ Selesai |
 
 ---
 
@@ -45,17 +45,17 @@ tbcare-backend/
 │
 ├── user-service/
 │   ├── src/
-│   │   ├── models/
-│   │   │   ├── blacklisted-token.js
-│   │   │   └── user.js
 │   │   ├── controllers/
 │   │   │   ├── auth-controller.js
 │   │   │   └── profile-controller.js
+│   │   ├── middleware/
+│   │   │   └── auth-middleware.js
+│   │   ├── models/
+│   │   │   ├── blacklisted-token.js
+│   │   │   └── user.js
 │   │   ├── routes/
 │   │   │   ├── auth-routes.js
 │   │   │   └── profile-routes.js
-│   │   ├── middleware/
-│   │   │   └── auth-middleware.js
 │   │   ├── utils/
 │   │   │   └── response.js
 │   │   └── server.js
@@ -66,19 +66,19 @@ tbcare-backend/
 │
 ├── reminder-medicine-service/
 │   ├── src/
-│   │   ├── models/
-│   │   │   ├── medicine.js
-│   │   │   └── medicine-history.js
 │   │   ├── controllers/
 │   │   │   ├── medicine-controller.js
 │   │   │   ├── medicine-history-controller.js
 │   │   │   └── schedule-controller.js
+│   │   ├── middleware/
+│   │   │   └── auth-middleware.js
+│   │   ├── models/
+│   │   │   ├── medicine.js
+│   │   │   └── medicine-history.js
 │   │   ├── routes/
 │   │   │   ├── medicine-routes.js
 │   │   │   ├── medicine-history-routes.js
 │   │   │   └── schedule-routes.js
-│   │   ├── middleware/
-│   │   │   └── auth-middleware.js
 │   │   ├── utils/
 │   │   │   └── response.js
 │   │   └── server.js
@@ -89,16 +89,16 @@ tbcare-backend/
 │
 ├── education-service/
 │   ├── src/
-│   │   ├── models/
-│   │   │   └── content.js
 │   │   ├── controllers/
 │   │   │   └── content-controllers.js
-│   │   ├── routes/
-│   │   │   └── content-routes.js
 │   │   ├── middleware/
 │   │   │   ├── auth-middleware.js
 │   │   │   ├── role-middleware.js
 │   │   │   └── upload-middleware.js
+│   │   ├── models/
+│   │   │   └── content.js
+│   │   ├── routes/
+│   │   │   └── content-routes.js
 │   │   ├── utils/
 │   │   │   └── response.js
 │   │   └── server.js
@@ -152,6 +152,25 @@ tbcare-backend/
 │   ├── Dockerfile
 │   └── package.json
 │
+├── health-service/
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   └── health-service-controller.js
+│   │   ├── middleware/
+│   │   │   ├── auth-middleware.js
+│   │   │   └── role-middleware.js
+│   │   ├── models/
+│   │   │   └── health-service.js
+│   │   ├── routes/
+│   │   │   └── health-service-routes.js
+│   │   ├── utils/
+│   │   │   └── response.js
+│   │   └── server.js
+│   ├── .env
+│   ├── .gitignore
+│   ├── Dockerfile
+│   └── package.json
+│
 ├── docker-compose.yml
 ├── docker-compose.prod.yml
 ├── .gitignore
@@ -166,96 +185,96 @@ tbcare-backend/
 
 Semua request melalui **API Gateway** di `http://localhost:3000`.
 
-> `-` = Publik (Tidak membutuhkan token)
-> `🔒` = Membutuhkan header `Authorization: Bearer <token>`
+> `-` = Publik (Tidak membutuhkan token)  
+> `🔒` = Membutuhkan header `Authorization: Bearer <token>`  
 > `🔐` = Membutuhkan header `Authorization: Bearer <token>` (Khusus **Admin**)
 
 ---
 
 ### Auth — `/api/auth`
 
-| Method | Endpoint | Deskripsi | Auth |
-|--------|----------|-----------|------|
-| POST | `/auth/register` | Registrasi akun baru | - |
-| POST | `/auth/login` | Login dan dapatkan token | - |
-| POST | `/auth/logout` | Logout akun (Blacklist token) | 🔒 |
+| Method | Endpoint         | Deskripsi                     | Auth |
+|--------|------------------|-------------------------------|------|
+| POST   | `/auth/register` | Registrasi akun baru          | -    |
+| POST   | `/auth/login`    | Login dan dapatkan token      | -    |
+| POST   | `/auth/logout`   | Logout akun (Blacklist token) | 🔒   |
 
 ---
 
 ### User — `/api/users`
 
-| Method | Endpoint | Deskripsi | Auth |
-|--------|----------|-----------|------|
-| GET | `/users/profile` | Ambil data profil | 🔒 |
-| PUT | `/users/profile` | Update nama & no telepon | 🔒 |
-| PUT | `/users/change-password` | Ganti password | 🔒 |
+| Method | Endpoint                 | Deskripsi                | Auth |
+|--------|--------------------------|--------------------------|------|
+| GET    | `/users/profile`         | Ambil data profil        | 🔒   |
+| PUT    | `/users/profile`         | Update nama & no telepon | 🔒   |
+| PUT    | `/users/change-password` | Ganti password           | 🔒   |
 
 ---
 
 ### Edukasi & Konten — `/api/konten`
 
-| Method | Endpoint | Deskripsi | Auth |
-|--------|----------|-----------|------|
-| GET | `/konten` | Ambil seluruh konten edukasi (mendukung filter query) | 🔒 |
-| GET | `/konten/:id` | Ambil detail spesifik satu konten edukasi | 🔒 |
-| POST | `/konten` | Tambah konten baru (Mendukung upload Video/Artikel) | 🔐 |
-| PUT | `/konten/:id` | Update data atau file konten edukasi | 🔐 |
-| DELETE | `/konten/:id` | Hapus konten dan hapus file fisik video terkait | 🔐 |
+| Method | Endpoint      | Deskripsi                                             | Auth |
+|--------|---------------|-------------------------------------------------------|------|
+| GET    | `/konten`     | Ambil seluruh konten edukasi (mendukung filter query) | 🔒   |
+| GET    | `/konten/:id` | Ambil detail spesifik satu konten edukasi             | 🔒   |
+| POST   | `/konten`     | Tambah konten baru (mendukung upload Video/Artikel)   | 🔐   |
+| PUT    | `/konten/:id` | Update data atau file konten edukasi                  | 🔐   |
+| DELETE | `/konten/:id` | Hapus konten dan hapus file fisik video terkait       | 🔐   |
 
 ---
 
 ### Obat (Medicine) — `/api/obat`
 
-| Method | Endpoint | Deskripsi | Auth |
-|--------|----------|-----------|------|
-| GET | `/obat` | Ambil daftar obat milik user | 🔒 |
-| POST | `/obat` | Tambah data obat baru ke daftar | 🔒 |
-| GET | `/obat/:id` | Ambil detail informasi obat tertentu | 🔒 |
-| PUT | `/obat/:id` | Update data obat | 🔒 |
-| DELETE | `/obat/:id` | Hapus data obat dari daftar | 🔒 |
+| Method | Endpoint    | Deskripsi                            | Auth |
+|--------|-------------|--------------------------------------|------|
+| GET    | `/obat`     | Ambil daftar obat milik user         | 🔒   |
+| POST   | `/obat`     | Tambah data obat baru ke daftar      | 🔒   |
+| GET    | `/obat/:id` | Ambil detail informasi obat tertentu | 🔒   |
+| PUT    | `/obat/:id` | Update data obat                     | 🔒   |
+| DELETE | `/obat/:id` | Hapus data obat dari daftar          | 🔒   |
 
 ---
 
 ### Riwayat Minum Obat — `/api/riwayat-obat`
 
-| Method | Endpoint | Deskripsi | Auth |
-|--------|----------|-----------|------|
-| GET | `/riwayat-obat` | Ambil rekam riwayat kepatuhan minum obat user | 🔒 |
-| POST | `/riwayat-obat` | Catat dan tandai bahwa obat telah diminum | 🔒 |
+| Method | Endpoint        | Deskripsi                                     | Auth |
+|--------|-----------------|-----------------------------------------------|------|
+| GET    | `/riwayat-obat` | Ambil rekam riwayat kepatuhan minum obat user | 🔒   |
+| POST   | `/riwayat-obat` | Catat dan tandai bahwa obat telah diminum     | 🔒   |
 
 ---
 
 ### Jadwal Pengingat — `/api/jadwal`
 
-| Method | Endpoint | Deskripsi | Auth |
-|--------|----------|-----------|------|
-| GET | `/jadwal/hari-ini` | Ambil jadwal pengingat minum obat hari ini | 🔒 |
-| GET | `/jadwal` | Ambil seluruh jadwal pengingat minum obat user | 🔒 |
-| POST | `/jadwal` | Buat jadwal pengingat minum obat baru | 🔒 |
-| PUT | `/jadwal/:id` | Update waktu atau jadwal pengingat | 🔒 |
-| DELETE | `/jadwal/:id` | Hapus jadwal pengingat | 🔒 |
+| Method | Endpoint           | Deskripsi                                      | Auth |
+|--------|--------------------|------------------------------------------------|------|
+| GET    | `/jadwal/hari-ini` | Ambil jadwal pengingat minum obat hari ini     | 🔒   |
+| GET    | `/jadwal`          | Ambil seluruh jadwal pengingat minum obat user | 🔒   |
+| POST   | `/jadwal`          | Buat jadwal pengingat minum obat baru          | 🔒   |
+| PUT    | `/jadwal/:id`      | Update waktu atau jadwal pengingat             | 🔒   |
+| DELETE | `/jadwal/:id`      | Hapus jadwal pengingat                         | 🔒   |
 
 ---
 
 ### Skrining TBC — `/api/skrining`
 
-| Method | Endpoint | Deskripsi | Auth |
-|--------|----------|-----------|------|
-| GET | `/skrining/pertanyaan` | Ambil daftar pertanyaan aktif untuk skrining | 🔒 |
-| POST | `/skrining` | Submit jawaban skrining dan kalkulasi tingkat risiko | 🔒 |
-| GET | `/skrining` | Ambil riwayat hasil skrining user | 🔒 |
-| GET | `/skrining/:id` | Ambil detail spesifik satu riwayat skrining beserta jawaban | 🔒 |
+| Method | Endpoint               | Deskripsi                                                   | Auth |
+|--------|------------------------|-------------------------------------------------------------|------|
+| GET    | `/skrining/pertanyaan` | Ambil daftar pertanyaan aktif untuk skrining                | 🔒   |
+| POST   | `/skrining`            | Submit jawaban skrining dan kalkulasi tingkat risiko        | 🔒   |
+| GET    | `/skrining`            | Ambil riwayat hasil skrining user                           | 🔒   |
+| GET    | `/skrining/:id`        | Ambil detail spesifik satu riwayat skrining beserta jawaban | 🔒   |
 
 ---
 
 ### Chatbot AI — `/api/chatbot`
 
-| Method | Endpoint                        | Deskripsi                                                        | Auth |
-|--------|---------------------------------|------------------------------------------------------------------|------|
-| POST   | `/chatbot`                      | Menyimpan interaksi pesan user dan respon bot                    | 🔒   |
-| GET    | `/chatbot/history`              | Mengambil daftar sesi riwayat obrolan (mendukung paginasi)       | 🔒   |
-| GET    | `/chatbot/history/:session_id`  | Mengambil detail obrolan multi-turn berdasarkan Session ID       | 🔒   |
-| DELETE | `/chatbot/history/:session_id`  | Menghapus seluruh riwayat percakapan pada sesi tertentu          | 🔒   |
+| Method | Endpoint                       | Deskripsi                                                  | Auth |
+|--------|--------------------------------|------------------------------------------------------------|------|
+| POST   | `/chatbot`                     | Menyimpan interaksi pesan user dan respon bot              | 🔒   |
+| GET    | `/chatbot/history`             | Mengambil daftar sesi riwayat obrolan (mendukung paginasi) | 🔒   |
+| GET    | `/chatbot/history/:session_id` | Mengambil detail obrolan multi-turn berdasarkan Session ID | 🔒   |
+| DELETE | `/chatbot/history/:session_id` | Menghapus seluruh riwayat percakapan pada sesi tertentu    | 🔒   |
 
 > **Catatan Session:**
 > - Request **tanpa** `session_id` → backend generate UUID baru → sesi baru dimulai
@@ -263,3 +282,13 @@ Semua request melalui **API Gateway** di `http://localhost:3000`.
 > - Riwayat percakapan otomatis dihapus setelah **90 hari** (TTL Index)
 
 ---
+
+### Layanan Kesehatan (Faskes) — `/api/layanan-kesehatan`
+
+| Method | Endpoint                | Deskripsi                                                     | Auth |
+|--------|-------------------------|---------------------------------------------------------------|------|
+| GET    | `/layanan-kesehatan`    | Ambil daftar faskes (mendukung query search, jenis, paginasi) | 🔒   |
+| GET    | `/layanan-kesehatan/:id`| Ambil detail spesifik satu faskes                             | 🔒   |
+| POST   | `/layanan-kesehatan`    | Tambah data faskes baru                                       | 🔐   |
+| PUT    | `/layanan-kesehatan/:id`| Update data faskes yang sudah ada                             | 🔐   |
+| DELETE | `/layanan-kesehatan/:id`| Hapus data faskes dari sistem                                 | 🔐   |
