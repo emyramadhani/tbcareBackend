@@ -820,34 +820,158 @@ const BANDAR_LAMPUNG = {
 };
 
 // ─────────────────────────────────────────────────────────────
-// TEMPLATE KOTA BARU 
+// DATA — KOTA METRO
+// Sumber: Data Dasar Fasyankes Prov. Lampung (Update Nov-Des 2025)
+// Total: 18 faskes (UPTPAS: 1, Klinik: 13, PMD: 4, BBKPM: 0)
 // ─────────────────────────────────────────────────────────────
-//
-// const METRO = {
-//   kota: 'Kota Metro',
-//   provinsi: 'Lampung',
-//   UPTPAS: [],
-//   Klinik: [],
-//   PMD: [],
-//   'BBKPM-BPKMB-P4': [],
-// };
-//
-// const LAMPUNG_SELATAN = {
-//   kota: 'Kabupaten Lampung Selatan',
-//   provinsi: 'Lampung',
-//   UPTPAS: [],
-//   Klinik: [],
-//   PMD: [],
-//   'BBKPM-BPKMB-P4': [],
-// };
+
+const METRO = {
+  kota: 'Kota Metro',
+  provinsi: 'Lampung',
+
+  // ── 1. UPTPAS ────────────────────────────────────────────────
+  UPTPAS: [
+    {
+      nama_faskes: 'LAPAS KELAS II A METRO',
+      jenis: 'UPTPAS',
+      alamat: 'Jl. Ahmad Yani No.199, Iringmulyo, Kec. Metro Timur, Kota Metro, Lampung',
+    },
+    {
+      nama_faskes: 'LAPAS KELAS I BANDAR LAMPUNG',
+      jenis: 'UPTPAS',
+      alamat: 'Jl. Pramuka No.12, Rajabasa, Langkapura, Kota Bandar Lampung, Lampung 35152',
+    },
+    {
+      nama_faskes: 'LAPAS KELAS II A KALIANDA',
+      jenis: 'UPTPAS',
+      alamat: '"Jl. Lintas Sumatera No.KM 05, Negeri Pandan, Kec. Kalianda, Kabupaten Lampung Selatan, LampungKab. Lampung Selatan Prov. Lampung',
+    },
+    {
+      nama_faskes: 'LAPAS KELAS II A KOTABUMI',
+      jenis: 'UPTPAS',
+      alamat: '"Jl. Permasyarakatan No.215, Tj. Harapan, Kec. Kotabumi Sel., Kabupaten Lampung Utara, Lampung 34514 Kab. Lampung Utara Prov. Lampung',
+    },
+    {
+      nama_faskes: 'LAPAS KELAS II B KOTA AGUNG',
+      jenis: 'UPTPAS',
+      alamat: 'Way Gelang, Agung Barat, Way Gelang, Tanggamus, Kabupaten Tanggamus, Lampung 35384 Kab. Tanggamus Prov. Lampung',
+    },
+    {
+      nama_faskes: 'LAPAS KELAS II B GUNUNG SUGIH',
+      jenis: 'UPTPAS',
+      alamat: 'JALAN RAYA KOTA GAJAH DESA BUYUT UDIK KECAMATAN GUNUNG SUGIH KAB. LAMPUNG TENGAH',
+    },
+    {
+      nama_faskes: 'LAPAS KELAS II B WAYKANAN',
+      jenis: 'UPTPAS',
+      alamat: 'Negeri Bumi Putra, Blambangan Umpu, Kabupaten Way Kanan, Lampung 34764 Kab. Way Kanan Prov. Lampung',
+    },
+  ],
+
+  // ── 2. KLINIK ────────────────────────────────────────────────
+  Klinik: [
+    {
+      nama_faskes: 'KLINIK MUHAMMADIYAH UAD',
+      jenis: 'Klinik',
+      alamat: 'Jl. Budi Utomo No 42 Margorejo Metro Selatan',
+    },
+    {
+      nama_faskes: 'KLINIK SANTA MARIA',
+      jenis: 'Klinik',
+      alamat: 'Jln. Sosrosudarmo No.2 Kel. Imopuro Kec. Metro Pusat',
+    },
+    {
+      nama_faskes: 'KLINIK MUHAMMADIYAH HADIMULYO',
+      jenis: 'Klinik',
+      alamat: 'Jalan Imam Bonjol No.102 Kel. Hadimulyo Barat Kec. Metro Pusat',
+    },
+    {
+      nama_faskes: 'KLINIK HADI WIJAYA',
+      jenis: 'Klinik',
+      alamat: 'Jl. Diponegoro No. 22 Hadimulyo Timur, Metro Pusat, Lampung',
+    },
+    {
+      nama_faskes: 'KLINIK GLOBAL MEDIKA',
+      jenis: 'Klinik',
+      alamat: 'Jl. Veteran No. 27, RT 007/RW 01, Kel. Hadimulyo Barat, Kec. Metro Pusat, Lampung',
+    },
+    {
+      nama_faskes: 'KLINIK LAODIKIA',
+      jenis: 'Klinik',
+      alamat: 'Jln. Banteng No.47 Kelurahan Hadimulyo Timur Metro Pusat',
+    },
+    {
+      nama_faskes: 'KLINIK POLKES METRO',
+      jenis: 'Klinik',
+      alamat: 'Jl. Imam Bonjol No. 89, Hadimulyo Barat Metro Pusat',
+    },
+    {
+      nama_faskes: 'KLINIK GRIYA SEHAT TERPADU',
+      jenis: 'Klinik',
+      alamat: 'Jalan Hassanudin No. 5 Kelurahan Imopuro, Kota Metro',
+    },
+    {
+      nama_faskes: 'KLINIK BHAYANGKARA POLRES METRO',
+      jenis: 'Klinik',
+      alamat: 'Jalan Raden Intan No.26 Kel. Imopuro, Kota Metro',
+    },
+    {
+      nama_faskes: 'KLINIK METRO MEDICAL CENTRE',
+      jenis: 'Klinik',
+      alamat: 'Jl. AH. Nasution No. 63 RT/RW 012/004 Yosorejo, Kota Metro',
+    },
+    {
+      nama_faskes: 'KLINIK MUHAMMADIYAH METRO TIMUR',
+      jenis: 'Klinik',
+      alamat: 'Jl. KH. Dewantara No. 52 Iringmulyo, Kec. Metro Timur, Kota Metro',
+    },
+    {
+      nama_faskes: 'KLINIK CIKO',
+      jenis: 'Klinik',
+      alamat: 'Jl. Soekarno Hatta No. 76-78 Kel. Mulyojati Metro Barat',
+    },
+    {
+      nama_faskes: 'KLINIK GRIYA MEDIKA',
+      jenis: 'Klinik',
+      alamat: 'Jl. Nunggal Sari RT 15 RW 04 Kel. Sumbersari Bantul, Kota Metro',
+    },
+  ],
+
+  // ── 3. PMD (Praktik Mandiri Dokter) ─────────────────────────
+  PMD: [
+    {
+      nama_faskes: 'PRAKTEK MANDIRI DOKTER ANDREAS INFIANTO, MM., SP.P(K)., FISR',
+      jenis: 'PMD',
+      alamat: 'Jl. Brigjend Sutiyoso No. 38 B/C, Kota Metro',
+    },
+    {
+      nama_faskes: 'PRAKTEK MANDIRI DR. RIA PUTRIONO',
+      jenis: 'PMD',
+      alamat: 'Jl. TPA RT 34 RW 09 Kelurahan Karangrejo Kecamatan Metro Utara',
+    },
+    {
+      nama_faskes: 'DR. LUKMAN HAKIM WIDJAYA',
+      jenis: 'PMD',
+      alamat: 'Jl. Mayjend. Ryacudu Blok C, Kota Metro',
+    },
+    {
+      nama_faskes: 'DR. ADE KURNIAWAN',
+      jenis: 'PMD',
+      alamat: 'Jl. Khairbras No.21, Kota Metro',
+    },
+  ],
+
+  // ── 4. BBKPM-BPKMB-P4 ───────────────────────────────────────
+  // Tidak ada data untuk Kota Metro pada update Nov-Des 2025
+  'BBKPM-BPKMB-P4': [],
+};
 
 // ─────────────────────────────────────────────────────────────
 // DAFTAR SEMUA KOTA 
 // ─────────────────────────────────────────────────────────────
 const allCities = [
   BANDAR_LAMPUNG,
-  // METRO,
-  // LAMPUNG_SELATAN,
+  METRO,
 ];
 
 // ─────────────────────────────────────────────────────────────

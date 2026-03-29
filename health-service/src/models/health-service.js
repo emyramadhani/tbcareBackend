@@ -43,4 +43,4 @@ const healthServiceSchema = new mongoose.Schema(
 
 healthServiceSchema.index({ nama_faskes: 1 });
 
-module.exports = mongoose.model('HealthService', healthServiceSchema, 'health_services');
+module.exports = mongoose.model('HealthService', healthServiceSchema, 'layanan_kesehatan');
