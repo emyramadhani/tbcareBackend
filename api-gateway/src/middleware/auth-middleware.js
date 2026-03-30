@@ -1,35 +1,38 @@
-const jwt = require('jsonwebtoken');
-
-
-const authMiddleware = (req, res, next) => {
-
-  const userIdFromGateway = req.headers['x-user-id'];
-  const userRoleFromGateway = req.headers['x-user-role'];
-
-  if (userIdFromGateway) {
-    req.userId = userIdFromGateway;
-    req.userRole = userRoleFromGateway;
-    return next();
-  }
-
+const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return errorResponse(res, 'Akses ditolak. Token tidak ditemukan.', 401);
+    return res.status(401).json({ success: false, message: 'Akses ditolak. Token tidak ditemukan.' });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
-    req.userRole = decoded.role; 
-    
-    req.headers['x-user-id'] = decoded.id; 
-    req.headers['x-user-role'] = decoded.role
-    
+    const validateResponse = await fetch(`${process.env.USER_SERVICE_URL}/api/auth/validate-token`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!validateResponse.ok) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Akses ditolak. Token tidak valid, sudah kadaluarsa, atau Anda telah logout.' 
+      });
+    }
+
+    const result = await validateResponse.json();
+
+    req.headers['x-user-id'] = result.data.id;
+    req.headers['x-user-role'] = result.data.role;
+
     next();
   } catch (err) {
-    return errorResponse(res, 'Token tidak valid atau sudah expired.', 401);
+    console.error('Gateway Auth Error:', err);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Terjadi kesalahan komunikasi dari Gateway ke Auth Service.' 
+    });
   }
 };
 
