@@ -10,7 +10,6 @@ const createObat = async (req, res) => {
   }
 
   try {
-
     const { nama_obat, dosis, waktu_minum } = req.body || {};
 
     if (!nama_obat || !dosis || !waktu_minum) {
@@ -53,9 +52,10 @@ const getAllObat = async (req, res) => {
 
 const getObatById = async (req, res) => {
   try {
+    
     const obat = await Obat.findOne({
       _id: req.params.id,
-      id_user: req.userId,
+      id_user: req.userId, 
       aktif: true,
     });
 
@@ -82,13 +82,12 @@ const updateObat = async (req, res) => {
   }
 
   try {
-
     const { nama_obat, dosis, waktu_minum } = req.body || {};
 
     const obat = await Obat.findOneAndUpdate(
       {
         _id: req.params.id,
-        id_user: req.userId,
+        id_user: req.userId, 
         aktif: true,
       },
       { nama_obat, dosis, waktu_minum },
@@ -117,6 +116,7 @@ const updateObat = async (req, res) => {
 
 const deleteObat = async (req, res) => {
   try {
+
     const obat = await Obat.findOneAndDelete({
       _id: req.params.id,
       id_user: req.userId,
