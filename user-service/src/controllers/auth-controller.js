@@ -2,10 +2,9 @@ const User = require('../models/user');
 const BlacklistedToken = require('../models/blacklisted-token');
 const jwt = require('jsonwebtoken');
 const { successResponse, errorResponse } = require('../utils/response');
-
+const { validationResult } = require('express-validator');
 
 const generateToken = (user) => {
-
   const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
   return jwt.sign(
     { id: user._id, role: user.role },
@@ -15,13 +14,19 @@ const generateToken = (user) => {
 };
 
 const register = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const errorMessages = errors.array().map(err => err.msg);
+    return errorResponse(res, `Validasi gagal: ${errorMessages.join(', ')}`, 400);
+  }
+
   try {
-    const { nama, email, password, no_telepon, role } = req.body;
+    const { nama_lengkap, email, password, no_telepon, role } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) return errorResponse(res, 'Email sudah terdaftar', 400);
-
-    const user = await User.create({ nama, email, password, no_telepon, role });
+    
+    const user = await User.create({ nama_lengkap, email, password, no_telepon, role });
     
     const token = generateToken(user);
     return successResponse(res, 'Registrasi berhasil', { token, id: user._id, email: user.email, role: user.role }, 201);
@@ -36,6 +41,13 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  // Cek error dari express-validator untuk login juga
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const errorMessages = errors.array().map(err => err.msg);
+    return errorResponse(res, `Validasi gagal: ${errorMessages.join(', ')}`, 400);
+  }
+
   try {
     const { email, password } = req.body;
 
