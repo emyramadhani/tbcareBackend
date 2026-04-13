@@ -12,7 +12,7 @@ services:
     environment:
       - PORT=3000
       - NODE_ENV=development
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET=${JWT_SECRET:-rahasialokal123}
       - USER_SERVICE_URL=http://user-service:3001
       - EDUCATION_SERVICE_URL=http://education-service:3002
       - REMINDER_SERVICE_URL=http://reminder-medicine-service:3003
@@ -44,7 +44,7 @@ services:
       - PORT=3001
       - NODE_ENV=development
       - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET=${JWT_SECRET:-rahasialokal123}
       - JWT_EXPIRES_IN=7d
     networks:
       - tbcare-network
@@ -64,7 +64,7 @@ services:
       - PORT=3003
       - NODE_ENV=development
       - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET=${JWT_SECRET:-rahasialokal123}
     networks:
       - tbcare-network
     volumes:
@@ -83,7 +83,7 @@ services:
       - PORT=3002
       - NODE_ENV=development
       - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET=${JWT_SECRET:-rahasialokal123}
     networks:
       - tbcare-network
     volumes:
@@ -103,7 +103,7 @@ services:
       - PORT=3005
       - NODE_ENV=development
       - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET=${JWT_SECRET:-rahasialokal123}
     networks:
       - tbcare-network
     volumes:
@@ -122,7 +122,7 @@ services:
       - PORT=3004
       - NODE_ENV=development
       - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET=${JWT_SECRET:-rahasialokal123}
     networks:
       - tbcare-network
     volumes:
@@ -141,7 +141,7 @@ services:
       - PORT=3006
       - NODE_ENV=development
       - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET=${JWT_SECRET:-rahasialokal123}
     networks:
       - tbcare-network
     volumes:
@@ -151,3 +151,6 @@ services:
 networks:
   tbcare-network:
     driver: bridge
+
+volumes:
+  education_uploads:

@@ -55,7 +55,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, message: 'Internal Server Error' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Edukasi Service running on port ${PORT}`);
   console.log(`Local: http://localhost:${PORT}`);
 });
