@@ -21,7 +21,7 @@ jobs:
           source: "."
           target: "/home/${{ secrets.USERNAME }}/tbcare-backend"
           rm: true
-
+    
       - name: Execute Docker Compose via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -29,14 +29,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Pindah ke folder proyek
             cd /home/${{ secrets.USERNAME }}/tbcare-backend
             
-            # Matikan sistem yang lama
             docker-compose -f docker-compose.prod.yml down
             
-            # Build dan hidupkan sistem yang baru dari kode teranyar
             docker-compose -f docker-compose.prod.yml up -d --build
             
-            # Bersihkan cache docker agar disk server tidak penuh
             docker image prune -af
