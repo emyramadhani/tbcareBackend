@@ -11,11 +11,11 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
-      - NODE_ENV=development
-      - JWT_SECRET=${JWT_SECRET:-rahasialokal123}
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
       - USER_SERVICE_URL=http://user-service:3001
-      - EDUCATION_SERVICE_URL=http://education-service:3002
-      - REMINDER_SERVICE_URL=http://reminder-medicine-service:3003
+      - EDUKASI_SERVICE_URL=http://education-service:3002
+      - MEDICINE_SERVICE_URL=http://reminder-medicine-service:3003
       - CHATBOT_SERVICE_URL=http://chatbot-service:3004
       - SKRINING_SERVICE_URL=http://skrining-service:3005
       - HEALTH_SERVICE_URL=http://health-service:3006
