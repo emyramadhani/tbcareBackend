@@ -20,8 +20,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "."
           target: "/home/${{ secrets.USERNAME }}/tbcare-backend"
-          rm: true
-    
+
       - name: Execute Docker Compose via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -31,8 +30,7 @@ jobs:
           script: |
             cd /home/${{ secrets.USERNAME }}/tbcare-backend
             
-            docker-compose -f docker-compose.prod.yml down
-            
-            docker-compose -f docker-compose.prod.yml up -d --build
-            
-            docker image prune -af
+            # MENGGUNAKAN SUDO AGAR TIDAK PERMISSION DENIED
+            sudo docker-compose -f docker-compose.prod.yml down
+            sudo docker-compose -f docker-compose.prod.yml up -d --build
+            sudo docker image prune -af
