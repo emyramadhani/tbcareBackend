@@ -35,6 +35,10 @@ jobs:
             echo "JWT_EXPIRES_IN=7d" >> .env
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
             
+            echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> .env
+            echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> .env
+            echo "DEEP_LINK_SCHEME=${{ secrets.DEEP_LINK_SCHEME }}" >> .env
+
             docker-compose -f docker-compose.prod.yml down
             docker-compose -f docker-compose.prod.yml up -d --build
             docker image prune -af

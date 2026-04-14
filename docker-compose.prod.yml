@@ -41,6 +41,9 @@ services:
       - MONGO_URI=${MONGO_URI}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRES_IN=7d
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - DEEP_LINK_SCHEME=${DEEP_LINK_SCHEME}
     networks:
       - tbcare-network
 

@@ -46,6 +46,9 @@ services:
       - MONGO_URI=mongodb://host.docker.internal:27017/tbcare
       - JWT_SECRET=${JWT_SECRET:-rahasialokal123}
       - JWT_EXPIRES_IN=7d
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - DEEP_LINK_SCHEME=tbcare
     networks:
       - tbcare-network
     volumes:
