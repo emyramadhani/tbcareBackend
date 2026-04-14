@@ -18,12 +18,25 @@ const proxy = (target) =>
         },
     });
 
+// auth service    
 router.use('/api/auth', proxy(process.env.USER_SERVICE_URL));
 router.use('/api/users', authMiddleware, proxy(process.env.USER_SERVICE_URL));
-router.use('/api/edukasi', authMiddleware, proxy(process.env.EDUKASI_SERVICE_URL));
-router.use('/api/medicine', authMiddleware, proxy(process.env.MEDICINE_SERVICE_URL));
+
+//konten edukasi
+router.use('/api/konten', authMiddleware, proxy(process.env.EDUKASI_SERVICE_URL));
+
+// reminder medicine service
+router.use('/api/obat', authMiddleware, proxy(process.env.MEDICINE_SERVICE_URL));
+router.use('/api/riwayat-obat', authMiddleware, proxy(process.env.MEDICINE_SERVICE_URL));
+router.use('/api/jadwal', authMiddleware, proxy(process.env.MEDICINE_SERVICE_URL));
+
+// chatbot service
 router.use('/api/chatbot', authMiddleware, proxy(process.env.CHATBOT_SERVICE_URL));
+
+// skrining service
 router.use('/api/skrining', authMiddleware, proxy(process.env.SKRINING_SERVICE_URL));
-router.use('/api/layanan', authMiddleware, proxy(process.env.HEALTH_SERVICE_URL));
+
+// layanan kesehatan service
+router.use('/api/layanan-kesehatan', authMiddleware, proxy(process.env.HEALTH_SERVICE_URL));
 
 module.exports = router;
