@@ -22,8 +22,11 @@ const proxy = (target) =>
 router.use('/api/auth', proxy(process.env.USER_SERVICE_URL));
 router.use('/api/users', authMiddleware, proxy(process.env.USER_SERVICE_URL));
 
-//konten edukasi
+//konten edukasi - API
 router.use('/api/konten', authMiddleware, proxy(process.env.EDUKASI_SERVICE_URL));
+
+// Video edukasi
+router.use('/videos', proxy(process.env.EDUKASI_SERVICE_URL));
 
 // reminder medicine service
 router.use('/api/obat', authMiddleware, proxy(process.env.MEDICINE_SERVICE_URL));

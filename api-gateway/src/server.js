@@ -10,10 +10,10 @@ const PORT = process.env.PORT || 3000;
 
 // middleware
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+}));
 app.use(morgan('dev'));
-// app.use(express.json());
-
 
 app.get('/', (req, res) => {
     res.json({ message: `API Gateway berjalan pada port ${PORT}` });
