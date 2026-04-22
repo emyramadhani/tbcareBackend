@@ -17,14 +17,13 @@ if (!fs.existsSync(uploadsDir)) {
   console.log('Folder uploads/videos berhasil dibuat');
 }
 
+app.use('/videos', express.static(path.join(__dirname, '../uploads/videos')));
+
 app.use(cors());
 app.use(helmet({
-
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 app.use(express.json());
-
-app.use('/videos', express.static(path.join(__dirname, '../uploads/videos')));
 
 mongoose
   .connect(process.env.MONGO_URI)
