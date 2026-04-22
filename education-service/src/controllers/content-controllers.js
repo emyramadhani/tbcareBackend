@@ -3,6 +3,8 @@ const path = require('path');
 const Konten = require('../models/content');
 const { successResponse, errorResponse } = require('../utils/response');
 
+const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 3002}`;
+
 const hapusFileVideo = (filename) => {
   if (!filename) return;
 
@@ -56,7 +58,7 @@ const getKontenById = async (req, res) => {
     return successResponse(res, 'Berhasil mengambil detail konten', konten);
   } catch (err) {
     console.error('ERROR getKontenById:', err);
-    
+
     if (err.name === 'CastError' && err.kind === 'ObjectId') {
       return errorResponse(res, 'Format ID konten tidak valid', 400);
     }
@@ -88,7 +90,7 @@ const createKonten = async (req, res) => {
       return errorResponse(res, 'File video wajib diupload untuk konten bertipe video', 400);
     }
 
-    const url_video = req.file ? `/videos/${req.file.filename}` : null;
+    const url_video = req.file ? `${BASE_URL}/videos/${req.file.filename}` : null;
 
     const konten = await Konten.create({
       judul,
@@ -138,7 +140,7 @@ const updateKonten = async (req, res) => {
     }
 
     if (konten.tipe === 'video' && req.file) {
-      konten.url_video = `/videos/${req.file.filename}`;
+      konten.url_video = `${BASE_URL}/videos/${req.file.filename}`;
     }
 
     await konten.save();
