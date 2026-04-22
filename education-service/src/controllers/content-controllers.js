@@ -101,7 +101,16 @@ const createKonten = async (req, res) => {
       url_video: tipe === 'video' ? url_video : null,
     });
 
-    return successResponse(res, 'Konten berhasil ditambahkan', konten, 201);
+    const file_size_bytes = req.file ? req.file.size : 0;
+
+    return res.status(201).json({
+      success: true,
+      message: 'Konten berhasil ditambahkan',
+      data: konten,
+      debug: {
+        file_size_bytes: file_size_bytes
+      }
+    });
   } catch (err) {
     if (req.file) hapusFileVideo(req.file.filename);
     console.error('ERROR createKonten:', err);

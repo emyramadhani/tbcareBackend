@@ -67,6 +67,8 @@ services:
       dockerfile: Dockerfile
     container_name: tbcare-education-service
     restart: always
+    ports:
+      - "3002:3002"
     environment:
       - PORT=3002
       - NODE_ENV=production
