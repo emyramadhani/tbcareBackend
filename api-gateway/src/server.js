@@ -8,7 +8,8 @@ const proxyRoutes = require('./routes/routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// middleware
+app.use('/', proxyRoutes);
+
 app.use(cors());
 app.use(helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' },
@@ -22,8 +23,6 @@ app.get('/', (req, res) => {
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', service: 'api-gateway' });
 });
-
-app.use('/', proxyRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
