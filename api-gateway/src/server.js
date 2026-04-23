@@ -1,40 +1,38 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const helmet = require("helmet");
-const morgan = require("morgan");
-const proxyRoutes = require("./routes/routes");
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const proxyRoutes = require('./routes/routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use("/", proxyRoutes);
+app.use('/', proxyRoutes);
 
 app.use(cors());
-app.use(
-  helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" },
-  }),
-);
-app.use(morgan("dev"));
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+}));
+app.use(morgan('dev'));
 
-app.get("/", (req, res) => {
-  res.json({ message: `API Gateway berjalan pada port ${PORT}` });
+app.get('/', (req, res) => {
+    res.json({ message: `API Gateway berjalan pada port ${PORT}` });
 });
 
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", service: "api-gateway" });
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', service: 'api-gateway' });
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    success: false,
-    message: "Internal Gateway Error",
-  });
+    console.error(err.stack);
+    res.status(500).json({
+        success: false,
+        message: 'Internal Gateway Error',
+    });
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`API Gateway berjalan di browser ${PORT}`);
-  console.log(`Local: http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`API Gateway berjalan pada port ${PORT}`);
+    console.log(`Local: http://localhost:${PORT}`);
 });
