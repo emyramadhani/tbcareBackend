@@ -194,19 +194,17 @@ const updateKonten = async (req, res) => {
 
 const deleteKonten = async (req, res) => {
   try {
-    const konten = await Konten.findByIdAndUpdate(
-      req.params.id,
-      {
-        deletedAt: new Date(),
-      },
-      {
-        new: true,
-      },
-    );
+    const konten = await Konten.findById(req.params.id);
 
     if (!konten) {
       return errorResponse(res, "Konten tidak ditemukan", 404);
     }
+
+    konten.deletedAt = new Date();
+
+    await konten.save();
+
+    console.log("HASIL DELETE:", konten);
 
     return successResponse(res, "Konten berhasil dihapus");
   } catch (err) {

@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const kontenSchema = new mongoose.Schema(
   {
     judul: {
       type: String,
-      required: [true, 'Judul konten wajib diisi'],
+      required: [true, "Judul konten wajib diisi"],
       trim: true,
-      maxlength: [150, 'Judul maksimal 150 karakter'],
+      maxlength: [150, "Judul maksimal 150 karakter"],
     },
     deskripsi: {
       type: String,
@@ -16,16 +16,16 @@ const kontenSchema = new mongoose.Schema(
     tipe: {
       type: String,
       enum: {
-        values: ['artikel', 'video'],
-        message: 'Tipe harus artikel atau video',
+        values: ["artikel", "video"],
+        message: "Tipe harus artikel atau video",
       },
-      required: [true, 'Tipe konten wajib diisi'],
+      required: [true, "Tipe konten wajib diisi"],
     },
     kategori: {
       type: String,
       enum: {
-        values: ['aktivitas', 'olahraga', 'nutrisi', 'motivasi'],
-        message: 'Kategori tidak valid',
+        values: ["aktivitas", "olahraga", "nutrisi", "motivasi"],
+        message: "Kategori tidak valid",
       },
       default: null,
     },
@@ -37,10 +37,16 @@ const kontenSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
-    timestamps: true, 
-  }
+    timestamps: true,
+  },
 );
 
-module.exports = mongoose.model('Konten', kontenSchema, 'konten_edukasi');
+module.exports =
+  mongoose.models.Konten ||
+  mongoose.model("Konten", kontenSchema, "konten_edukasi");
