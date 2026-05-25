@@ -5,6 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
+    "test": "jest",
     "dev": "nodemon -L src/server.js"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "mongoose": "^9.2.4"
   },
   "devDependencies": {
+    "jest": "^30.4.2",
     "nodemon": "^3.1.14"
   }
 }
