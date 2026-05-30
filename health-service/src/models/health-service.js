@@ -1,46 +1,52 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const healthServiceSchema = new mongoose.Schema(
   {
     nama_faskes: {
       type: String,
-      required: [true, 'Nama fasilitas kesehatan wajib diisi'],
+      required: [true, "Nama fasilitas kesehatan wajib diisi"],
       trim: true,
     },
     jenis: {
       type: String,
-      enum: {
-        values: ['UPTPAS', 'PMD', 'Klinik', 'BBKPM-BPKMB-P4'],
-        message: 'Jenis layanan harus salah satu dari: UPTPAS, PMD, Klinik, BBKPM-BPKMB-P4',
-      },
-      required: [true, 'Jenis layanan wajib diisi'],
+      required: [true, "Jenis fasilitas kesehatan wajib diisi"],
+      trim: true,
     },
     alamat: {
       type: String,
-      required: [true, 'Alamat wajib diisi'],
       trim: true,
+      default: null,
     },
-
     jam_buka: {
       type: String,
-      default: '-', 
-      trim: true,
+      default: null,
     },
     no_telepon: {
       type: String,
-      default: '-', 
       trim: true,
+      default: null,
     },
     gambar_url: {
       type: String,
-      default: null, 
+      default: null,
     },
+
+    // ── SOFT DELETE ──────────────────────────────────────────────
+    // null  = layanan masih aktif / tampil ke pengguna
+    // Date  = layanan sudah dihapus (menyimpan tanggal penghapusan)
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
+    // ─────────────────────────────────────────────────────────────
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-healthServiceSchema.index({ nama_faskes: 1 });
-
-module.exports = mongoose.model('HealthService', healthServiceSchema, 'layanan_kesehatan');
+module.exports = mongoose.model(
+  "HealthService",
+  healthServiceSchema,
+  "layanan_kesehatan",
+);
