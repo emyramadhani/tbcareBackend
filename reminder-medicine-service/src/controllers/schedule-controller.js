@@ -1,24 +1,26 @@
-const Obat = require('../models/medicine');
-const MedicineHistory = require('../models/medicine-history');
-const { successResponse, errorResponse } = require('../utils/response');
+const Obat = require("../models/medicine");
+const MedicineHistory = require("../models/medicine-history");
+const { successResponse, errorResponse } = require("../utils/response");
 
+// ── GET /api/jadwal/hari-ini ─────────────────────────────────────
 const getJadwalHariIni = async (req, res) => {
   try {
-
     const hariIni = new Date();
     const awalHari = new Date(hariIni);
     awalHari.setHours(0, 0, 0, 0);
     const akhirHari = new Date(hariIni);
     akhirHari.setHours(23, 59, 59, 999);
 
+    // SOFT DELETE: ganti 'aktif: true' → 'deletedAt: null'
+    // Jadwal hanya menampilkan obat yang belum dihapus
     const semuaObat = await Obat.find({
       id_user: req.userId,
-      aktif: true,
+      deletedAt: null,
     }).sort({ createdAt: -1 });
 
     if (semuaObat.length === 0) {
-      return successResponse(res, 'Berhasil mengambil jadwal hari ini', {
-        tanggal: awalHari.toISOString().split('T')[0],
+      return successResponse(res, "Berhasil mengambil jadwal hari ini", {
+        tanggal: awalHari.toISOString().split("T")[0],
         progress: {
           sudah_minum: 0,
           total_obat: 0,
@@ -36,13 +38,13 @@ const getJadwalHariIni = async (req, res) => {
     });
 
     const sudahMinumSet = new Set(
-      riwayatHariIni.map((r) => r.id_obat.toString())
+      riwayatHariIni.map((r) => r.id_obat.toString()),
     );
 
     const semuaObatDenganStatus = semuaObat.map((obat) => {
       const sudahMinum = sudahMinumSet.has(obat._id.toString());
       const riwayat = riwayatHariIni.find(
-        (r) => r.id_obat.toString() === obat._id.toString()
+        (r) => r.id_obat.toString() === obat._id.toString(),
       );
 
       return {
@@ -56,7 +58,7 @@ const getJadwalHariIni = async (req, res) => {
     });
 
     const obatBerikutnya = semuaObatDenganStatus.filter(
-      (obat) => !obat.sudah_minum
+      (obat) => !obat.sudah_minum,
     );
 
     const totalObat = semuaObat.length;
@@ -64,8 +66,8 @@ const getJadwalHariIni = async (req, res) => {
     const persentase =
       totalObat > 0 ? Math.round((sudahMinum / totalObat) * 100) : 0;
 
-    return successResponse(res, 'Berhasil mengambil jadwal hari ini', {
-      tanggal: awalHari.toISOString().split('T')[0],
+    return successResponse(res, "Berhasil mengambil jadwal hari ini", {
+      tanggal: awalHari.toISOString().split("T")[0],
       progress: {
         sudah_minum: sudahMinum,
         total_obat: totalObat,
@@ -75,8 +77,8 @@ const getJadwalHariIni = async (req, res) => {
       semua_obat: semuaObatDenganStatus,
     });
   } catch (err) {
-    console.error('ERROR DETAIL:', err);
-    return errorResponse(res, 'Server error', 500);
+    console.error("ERROR DETAIL:", err);
+    return errorResponse(res, "Server error", 500);
   }
 };
 

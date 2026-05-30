@@ -1,26 +1,28 @@
-const { validationResult } = require('express-validator');
-const MedicineHistory = require('../models/medicine-history');
-const Obat = require('../models/medicine');
-const { successResponse, errorResponse } = require('../utils/response');
+const { validationResult } = require("express-validator");
+const MedicineHistory = require("../models/medicine-history");
+const Obat = require("../models/medicine");
+const { successResponse, errorResponse } = require("../utils/response");
 
-// ── POST /api/riwayat-obat ──
+// ── POST /api/riwayat-obat ───────────────────────────────────────
 const confirmMedicine = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return errorResponse(res, 'Validasi gagal', 400, errors.array());
+    return errorResponse(res, "Validasi gagal", 400, errors.array());
   }
 
   try {
     const { id_obat, tanggal } = req.body;
 
+    // SOFT DELETE: ganti 'aktif: true' → 'deletedAt: null'
+    // Hanya obat yang masih aktif yang bisa dikonfirmasi
     const obat = await Obat.findOne({
       _id: id_obat,
       id_user: req.userId,
-      aktif: true,
+      deletedAt: null,
     });
 
     if (!obat) {
-      return errorResponse(res, 'Obat tidak ditemukan', 404);
+      return errorResponse(res, "Obat tidak ditemukan", 404);
     }
 
     const tanggalNormalized = new Date(tanggal);
@@ -34,8 +36,8 @@ const confirmMedicine = async (req, res) => {
     if (existing) {
       return errorResponse(
         res,
-        'Obat ini sudah dikonfirmasi untuk tanggal tersebut',
-        409
+        "Obat ini sudah dikonfirmasi untuk tanggal tersebut",
+        409,
       );
     }
 
@@ -47,21 +49,20 @@ const confirmMedicine = async (req, res) => {
       waktu_konfirmasi: new Date(),
     });
 
-    return successResponse(res, 'Konfirmasi minum obat berhasil', history, 201);
+    return successResponse(res, "Konfirmasi minum obat berhasil", history, 201);
   } catch (err) {
-
     if (err.code === 11000) {
       return errorResponse(
         res,
-        'Obat ini sudah dikonfirmasi untuk tanggal tersebut',
-        409
+        "Obat ini sudah dikonfirmasi untuk tanggal tersebut",
+        409,
       );
     }
-    return errorResponse(res, 'Server error', 500);
+    return errorResponse(res, "Server error", 500);
   }
 };
 
-
+// ── GET /api/riwayat-obat ────────────────────────────────────────
 const getMedicineHistory = async (req, res) => {
   try {
     const { dari, sampai, id_obat } = req.query;
@@ -86,26 +87,27 @@ const getMedicineHistory = async (req, res) => {
       filter.id_obat = id_obat;
     }
 
+    // CATATAN: populate tetap berjalan meskipun obat sudah di-soft-delete.
+    // Ini disengaja agar riwayat historis tetap tampil lengkap beserta
+    // info nama obat, dosis, dll.
     const history = await MedicineHistory.find(filter)
-      .populate('id_obat', 'nama_obat dosis waktu_minum')
+      .populate("id_obat", "nama_obat dosis waktu_minum deletedAt")
       .sort({ tanggal: -1 });
 
     const totalRecord = history.length;
     const totalMinum = history.filter((h) => h.status_minum === true).length;
     const persentaseKepatuhan =
-      totalRecord > 0
-        ? Math.round((totalMinum / totalRecord) * 100)
-        : 0;
+      totalRecord > 0 ? Math.round((totalMinum / totalRecord) * 100) : 0;
 
-    return successResponse(res, 'Berhasil mengambil riwayat minum obat', {
+    return successResponse(res, "Berhasil mengambil riwayat minum obat", {
       persentase_kepatuhan: persentaseKepatuhan,
       total_record: totalRecord,
       total_minum: totalMinum,
       riwayat: history,
     });
   } catch (err) {
-    console.error('ERROR DETAIL:', err);
-    return errorResponse(res, 'Server error', 500);
+    console.error("ERROR DETAIL:", err);
+    return errorResponse(res, "Server error", 500);
   }
 };
 
