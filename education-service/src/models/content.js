@@ -39,4 +39,4 @@ const contentSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-module.exports = mongoose.model("Konten", contentSchema);
+module.exports = mongoose.model("Konten", contentSchema, "konten_edukasi");
