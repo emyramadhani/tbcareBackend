@@ -1,32 +1,24 @@
 const mongoose = require("mongoose");
 
-const kontenSchema = new mongoose.Schema(
+const contentSchema = new mongoose.Schema(
   {
     judul: {
       type: String,
-      required: [true, "Judul konten wajib diisi"],
+      required: [true, "Judul wajib diisi"],
       trim: true,
-      maxlength: [150, "Judul maksimal 150 karakter"],
     },
     deskripsi: {
       type: String,
-      trim: true,
       default: null,
     },
     tipe: {
       type: String,
-      enum: {
-        values: ["artikel", "video"],
-        message: "Tipe harus artikel atau video",
-      },
-      required: [true, "Tipe konten wajib diisi"],
+      enum: ["artikel", "video"],
+      required: [true, "Tipe wajib diisi"],
     },
     kategori: {
       type: String,
-      enum: {
-        values: ["aktivitas", "olahraga", "nutrisi", "motivasi"],
-        message: "Kategori tidak valid",
-      },
+      enum: ["aktivitas", "olahraga", "nutrisi", "motivasi", null],
       default: null,
     },
     isi: {
@@ -37,16 +29,14 @@ const kontenSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    deletedAt: {
-      type: Date,
-      default: null,
-    },
+
+    // ── SOFT DELETE ──────────────────────────────────────────────
+    // null  = konten masih aktif / tampil ke pengguna
+    // Date  = konten sudah dihapus (tanggal penghapusan)
+    deletedAt: { type: Date, default: null },
+    // ─────────────────────────────────────────────────────────────
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
-module.exports =
-  mongoose.models.Konten ||
-  mongoose.model("Konten", kontenSchema, "konten_edukasi");
+module.exports = mongoose.model("Konten", contentSchema);
