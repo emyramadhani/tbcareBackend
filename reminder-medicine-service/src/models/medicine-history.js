@@ -1,21 +1,24 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+
+// Riwayat minum obat TIDAK perlu soft delete.
+// Ini adalah data historis / catatan audit kepatuhan minum obat.
+// Meskipun obatnya di-soft-delete, riwayatnya tetap harus tersimpan.
 
 const medicineHistorySchema = new mongoose.Schema(
   {
     id_obat: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, 'ID obat wajib diisi'],
-      ref: 'Obat',
+      required: [true, "ID obat wajib diisi"],
+      ref: "Obat",
     },
     id_user: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, 'ID user wajib diisi'],
-      ref: 'User',
-
+      required: [true, "ID user wajib diisi"],
+      ref: "User",
     },
     tanggal: {
       type: Date,
-      required: [true, 'Tanggal wajib diisi'],
+      required: [true, "Tanggal wajib diisi"],
     },
     status_minum: {
       type: Boolean,
@@ -28,9 +31,13 @@ const medicineHistorySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 medicineHistorySchema.index({ id_obat: 1, tanggal: 1 }, { unique: true });
 
-module.exports = mongoose.model('MedicineHistory', medicineHistorySchema, 'riwayat_minum_obat');
+module.exports = mongoose.model(
+  "MedicineHistory",
+  medicineHistorySchema,
+  "riwayat_minum_obat",
+);
